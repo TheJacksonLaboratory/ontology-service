@@ -1,0 +1,14 @@
+micronaut:
+  application:
+    name: hpoweb
+datasources:
+  default:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    db-type: mysql
+netty:
+  default:
+    allocator:
+      max-order: 3
+api-prefix:
+  hpo: /api/hpo
+  maxo: /api/maxo

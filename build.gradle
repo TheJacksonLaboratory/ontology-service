@@ -1,0 +1,64 @@
+plugins {
+    id("groovy") 
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.7.3"
+    id("io.micronaut.test-resources") version "3.7.3"
+}
+
+version = "0.1"
+group = "org.jacksonlaboratory"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("mysql:mysql-connector-java")
+    implementation("io.micronaut:micronaut-validation")
+    implementation("org.monarchinitiative.phenol:phenol-core:2.0.0-RC5")
+    implementation("org.monarchinitiative.phenol:phenol-io:2.0.0-RC5")
+    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.0-RC5")
+
+}
+
+
+application {
+    mainClass.set("org.jacksonlaboratory.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
+
+tasks {
+    dockerBuild {
+        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+    }
+
+    dockerBuildNative {
+        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+    }
+}
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("org.jacksonlaboratory.*")
+    }
+    testResources {
+        additionalModules.add("jdbc-mysql")
+    }
+}
+
+
+

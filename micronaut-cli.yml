@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: org.jacksonlaboratory
+testFramework: spock
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, github-workflow-google-cloud-run, gradle, http-client, jackson-databind, java, java-application, jdbc-hikari, logback, micronaut-build, mysql, netty-server, openapi, readme, shade, spock, test-resources, yaml]
