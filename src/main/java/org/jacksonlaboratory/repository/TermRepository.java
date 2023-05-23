@@ -6,6 +6,4 @@ import org.jacksonlaboratory.model.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 @Repository
-public interface TermRepository extends CrudRepository<OntologyTerm, TermId> {
-
-}
+public interface TermRepository extends CrudRepository<OntologyTerm, TermId> {}

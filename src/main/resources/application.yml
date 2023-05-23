@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: hpoweb
+    name: ontology-service-${ONTOLOGY:unknown}
 datasources:
   default:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,6 +9,6 @@ netty:
   default:
     allocator:
       max-order: 3
-api-prefix:
-  hpo: /api/hpo
-  maxo: /api/maxo
+api-url:
+  prefix: /api/v1
+ontology: ${ONTOLOGY:unknown}
