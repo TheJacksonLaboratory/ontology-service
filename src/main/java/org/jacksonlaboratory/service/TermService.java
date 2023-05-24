@@ -9,8 +9,9 @@ import java.util.Optional;
 
 @Singleton
 public class TermService {
-	private final TermRepository termRepository;
-	public TermService(TermRepository termRepository) {
+	private TermRepository termRepository;
+
+	public TermService(TermRepository termRepository){
 		this.termRepository = termRepository;
 	}
 

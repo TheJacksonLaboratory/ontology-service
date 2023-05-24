@@ -1,8 +1,8 @@
 plugins {
     id("groovy") 
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.7.3"
-    id("io.micronaut.test-resources") version "3.7.3"
+    id("io.micronaut.application") version "3.7.9"
+    id("io.micronaut.test-resources") version "3.7.9"
 }
 
 version = "0.1"
@@ -13,22 +13,25 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:1.5.2")
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-jackson-databind")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("io.swagger.core.v3:swagger-annotations")
-    implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+    implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:1.5.2")
-    annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.2")
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.flywaydb:flyway-mysql")
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java")
+
+
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.2")
+    implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut:micronaut-validation")
     implementation("org.monarchinitiative.phenol:phenol-core:2.0.0-RC5")
     implementation("org.monarchinitiative.phenol:phenol-io:2.0.0-RC5")
@@ -61,9 +64,6 @@ micronaut {
     processing {
         incremental(true)
         annotations("org.jacksonlaboratory.*")
-    }
-    testResources {
-        additionalModules.add("jdbc-mysql")
     }
 }
 

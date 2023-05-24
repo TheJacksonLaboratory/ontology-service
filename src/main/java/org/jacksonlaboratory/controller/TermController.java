@@ -9,15 +9,15 @@ import java.util.Optional;
 
 @Controller("${api-url.prefix}/${ontology}/term")
 public class TermController {
-    private final TermService termService;
 
+    private TermService termService;
     public TermController(TermService termService) {
         this.termService = termService;
     }
 
     @Get(uri="/{id}", produces="application/json")
     public OntologyTerm details(@PathVariable TermId id) {
-        Optional<OntologyTerm> term = termService.getOntologyTermByTermId(id);
+        Optional<OntologyTerm> term = this.termService.getOntologyTermByTermId(id);
         return term.orElse(null);
     }
 

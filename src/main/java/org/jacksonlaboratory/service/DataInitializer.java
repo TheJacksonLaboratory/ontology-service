@@ -13,7 +13,12 @@ import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.Ontology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
@@ -23,40 +28,41 @@ import java.util.stream.Collectors;
 public class DataInitializer implements ApplicationEventListener<ApplicationStartupEvent> {
 
 	private final static Logger log = LoggerFactory.getLogger(DataInitializer.class);
-	private final TermRepository termRepository;
 	private final SynchronousTransactionManager<Connection> transactionManager;
 	private final ClassPathResourceLoader loader;
+	private final TermRepository termRepository;
 	@Value("${load}")
 	boolean shouldLoad;
 	@Value("${ontology}")
 	String ontology;
 
-	DataInitializer(TermRepository termRepository, SynchronousTransactionManager<Connection> transactionManager) {
-		this.termRepository = termRepository;
+	public DataInitializer(SynchronousTransactionManager<Connection> transactionManager, TermRepository termRepository) {
 		this.loader = new ResourceResolver().getLoader(ClassPathResourceLoader.class).orElseThrow();
 		this.transactionManager = transactionManager;
+		this.termRepository = termRepository;
 	}
 
 	@Override
 	public void onApplicationEvent(ApplicationStartupEvent event) {
 		if(shouldLoad && !ontology.isBlank()){
 			log.info("Initializing sample data...");
-			Optional<InputStream> stream = loader.getResourceAsStream("classpath:${ontology}.json");
-			if(stream.isPresent()){
-				Ontology ontology = OntologyLoader.loadOntology(stream.get());
-				List<OntologyTerm> terms = ontology.getTerms().stream().map(OntologyTerm::new).collect(Collectors.toList());
-				// Build Terms
-				transactionManager.executeWrite(status -> {
-					this.termRepository.deleteAll();
-					this.termRepository.saveAll(terms);
-					return null;
-				});
-				//Build Parents
-				//Build Children
-			} else {
-				throw new RuntimeException();
-			}
+				File file = new File(String.format("/Users/gargam/Develop/ontology-service/data/%s-simple-non-classified.json", ontology));
+				if (file.exists()){
+					Ontology ontology = OntologyLoader.loadOntology(file);
+					List<OntologyTerm> terms = ontology.getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
+					transactionManager.executeWrite(status -> {
+						this.termRepository.deleteAll();
+						this.termRepository.saveAll(terms);
+						return null;
+					});
+					//Build Parents
+					//Build Children
+				} else {
+					throw new RuntimeException();
+				}
+
+		} else {
+			log.info("Skipping initializing data...");
 		}
-		log.info("Data initialization is done...");
 	}
 }
