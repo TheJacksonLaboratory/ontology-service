@@ -5,6 +5,7 @@ import org.jacksonlaboratory.model.OntologyTerm;
 import org.jacksonlaboratory.service.TermService;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller("${api-url.prefix}/${ontology}/term")

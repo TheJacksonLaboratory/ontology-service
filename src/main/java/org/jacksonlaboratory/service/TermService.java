@@ -5,6 +5,7 @@ import org.jacksonlaboratory.model.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import java.util.List;
 import java.util.Optional;
 
 @Singleton
@@ -17,5 +18,9 @@ public class TermService {
 
 	public Optional<OntologyTerm> getOntologyTermByTermId(TermId id){
 		return this.termRepository.findById(id);
+	}
+
+	public List<OntologyTerm> searchOntologyTerm(String q){
+		return this.termRepository.search(q);
 	}
 }

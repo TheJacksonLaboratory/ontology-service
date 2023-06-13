@@ -7,8 +7,7 @@ datasources:
     driverClassName: org.h2.Driver
     username: sa
     password: ''
-    schema-generate: CREATE_DROP
-    dialect: H2
+    dialect: MYSQL
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    db-type: mysql
 jpa:
@@ -20,6 +19,10 @@ jpa:
         hbm2ddl:
           auto: create-drop
         show_sql: true
+flyway:
+  datasources:
+    default:
+      enabled: true
 netty:
   default:
     allocator:

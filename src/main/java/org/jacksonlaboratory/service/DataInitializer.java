@@ -6,6 +6,7 @@ import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.scan.ClassPathResourceLoader;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.micronaut.transaction.SynchronousTransactionManager;
+import io.micronaut.transaction.TransactionDefinition;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.model.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
@@ -14,6 +15,7 @@ import org.monarchinitiative.phenol.ontology.data.Ontology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -43,20 +45,16 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 	}
 
 	@Override
+	@Transactional
 	public void onApplicationEvent(ApplicationStartupEvent event) {
 		if(shouldLoad && !ontology.isBlank()){
 			log.info("Initializing sample data...");
 				File file = new File(String.format("/Users/gargam/Develop/ontology-service/data/%s-simple-non-classified.json", ontology));
 				if (file.exists()){
 					Ontology ontology = OntologyLoader.loadOntology(file);
+					this.termRepository.configure();
 					List<OntologyTerm> terms = ontology.getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
-					transactionManager.executeWrite(status -> {
-						this.termRepository.deleteAll();
-						this.termRepository.saveAll(terms);
-						return null;
-					});
-					//Build Parents
-					//Build Children
+					this.termRepository.saveAll(terms);
 				} else {
 					throw new RuntimeException();
 				}
