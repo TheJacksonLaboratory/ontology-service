@@ -1,7 +1,7 @@
 package org.jacksonlaboratory.service;
 
 import jakarta.inject.Singleton;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
@@ -22,5 +22,9 @@ public class TermService {
 
 	public List<OntologyTerm> searchOntologyTerm(String q){
 		return this.termRepository.search(q);
+	}
+
+	private List<OntologyTerm> getInternationalTerms(TermId id){
+		return null;
 	}
 }

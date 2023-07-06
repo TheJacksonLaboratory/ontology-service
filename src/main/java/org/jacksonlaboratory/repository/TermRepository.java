@@ -1,10 +1,9 @@
 package org.jacksonlaboratory.repository;
 
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

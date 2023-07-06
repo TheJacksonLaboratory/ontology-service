@@ -3,7 +3,7 @@ package org.jacksonlaboratory.controller;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.QueryValue;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.service.TermService;
 
 import java.util.List;

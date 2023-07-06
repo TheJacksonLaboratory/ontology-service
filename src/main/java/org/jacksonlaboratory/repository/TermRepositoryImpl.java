@@ -3,15 +3,12 @@ package org.jacksonlaboratory.repository;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,17 +1,16 @@
 package org.jacksonlaboratory.controller;
 
 import io.micronaut.http.annotation.*;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.service.TermService;
 import org.monarchinitiative.phenol.ontology.data.TermId;
-
-import java.util.List;
 import java.util.Optional;
 
 @Controller("${api-url.prefix}/${ontology}/term")
 public class TermController {
 
     private TermService termService;
+
     public TermController(TermService termService) {
         this.termService = termService;
     }

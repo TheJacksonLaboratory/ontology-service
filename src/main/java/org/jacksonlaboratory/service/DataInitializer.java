@@ -6,23 +6,29 @@ import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.scan.ClassPathResourceLoader;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.micronaut.transaction.SynchronousTransactionManager;
-import io.micronaut.transaction.TransactionDefinition;
 import jakarta.inject.Singleton;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.ingest.BabelonIngestor;
+import org.jacksonlaboratory.ingest.BabelonLine;
+import org.jacksonlaboratory.ingest.BabelonNavigator;
+import org.jacksonlaboratory.ingest.TranslationProcessor;
+import org.jacksonlaboratory.model.Language;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
+import org.jacksonlaboratory.model.entity.Translation;
 import org.jacksonlaboratory.repository.TermRepository;
+import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.Ontology;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,15 +39,20 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 	private final SynchronousTransactionManager<Connection> transactionManager;
 	private final ClassPathResourceLoader loader;
 	private final TermRepository termRepository;
+	private final TranslationRepository translationRepository;
 	@Value("${load}")
 	boolean shouldLoad;
 	@Value("${ontology}")
 	String ontology;
+	@Value("${international}")
+	boolean international;
 
-	public DataInitializer(SynchronousTransactionManager<Connection> transactionManager, TermRepository termRepository) {
+	public DataInitializer(SynchronousTransactionManager<Connection> transactionManager, TermRepository termRepository,
+						   TranslationRepository translationRepository) {
 		this.loader = new ResourceResolver().getLoader(ClassPathResourceLoader.class).orElseThrow();
 		this.transactionManager = transactionManager;
 		this.termRepository = termRepository;
+		this.translationRepository = translationRepository;
 	}
 
 	@Override
@@ -49,18 +60,37 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 	public void onApplicationEvent(ApplicationStartupEvent event) {
 		if(shouldLoad && !ontology.isBlank()){
 			log.info("Initializing sample data...");
-				File file = new File(String.format("/Users/gargam/Develop/ontology-service/data/%s-simple-non-classified.json", ontology));
-				if (file.exists()){
+			File file = new File(String.format("data/%s-simple-non-classified.json", ontology));
+			if (file.exists()){
+				try {
 					Ontology ontology = OntologyLoader.loadOntology(file);
 					this.termRepository.configure();
 					List<OntologyTerm> terms = ontology.getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
 					this.termRepository.saveAll(terms);
-				} else {
-					throw new RuntimeException();
+					if (international){
+						log.info("Internationalization enabled.");
+						BabelonNavigator navigator = BabelonIngestor.of().load(new File("data/hp-all.babelon.tsv").toPath());
+						terms.forEach(t -> {
+							List<Translation> translationsByTerm = new ArrayList<>();
+							Optional<Map<Language, List<BabelonLine>>> linesByLanguage = navigator.getAggregatedLanguageLinesById(TermId.of(t.id()));
+							linesByLanguage.ifPresent(languageListMap -> languageListMap.forEach((key, value) -> {
+								Translation translation = TranslationProcessor.processTranslation(t, key, value);
+								translationsByTerm.add(translation);
+							}));
+							this.translationRepository.saveAll(translationsByTerm);
+						});
+					}
+				} catch(IOException e){
+					throw new RuntimeException(e);
 				}
+			} else {
+				throw new RuntimeException();
+			}
 
 		} else {
 			log.info("Skipping initializing data...");
 		}
 	}
+
+
 }
