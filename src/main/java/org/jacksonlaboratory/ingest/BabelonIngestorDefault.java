@@ -19,7 +19,7 @@ public class BabelonIngestorDefault implements BabelonIngestor {
 	@Override
 	public BabelonNavigator load(InputStream is) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
+		reader.readLine();
 		Map<TermId, List<BabelonLine>> translationsByTermId = new HashMap<>();
 		for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 			BabelonLine babelonLine;

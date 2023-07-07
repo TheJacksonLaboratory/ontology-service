@@ -5,6 +5,8 @@ import org.jacksonlaboratory.model.PredicateType;
 import org.jacksonlaboratory.model.TranslationStatus;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import java.util.Objects;
+
 public class BabelonLine {
 
 	private final Language source_language;
@@ -81,5 +83,18 @@ public class BabelonLine {
 
 	public TranslationStatus status() {
 		return status;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BabelonLine that = (BabelonLine) o;
+		return source_language == that.source_language && translation_language == that.translation_language && Objects.equals(id, that.id) && type == that.type && Objects.equals(source_text, that.source_text) && Objects.equals(translation_text, that.translation_text) && status == that.status;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(source_language, translation_language, id, type, source_text, translation_text, status);
 	}
 }

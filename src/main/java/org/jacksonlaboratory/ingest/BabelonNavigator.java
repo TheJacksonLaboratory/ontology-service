@@ -18,4 +18,8 @@ public class BabelonNavigator {
 		Optional<BabelonData> targetData =  babelonData.stream().filter(data -> data.id().equals(id)).findFirst();
 		return targetData.map(data -> data.babelonLines().stream().collect(Collectors.groupingBy(BabelonLine::translation_language)));
 	}
+
+	public int numberTermsTranslated(){
+		return babelonData.size();
+	}
 }
