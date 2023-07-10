@@ -8,8 +8,10 @@ import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Singleton
 public class TermService {
@@ -41,10 +43,7 @@ public class TermService {
 	}
 
 	public List<OntologyTerm> searchOntologyTerm(String q){
-		return this.termRepository.search(q);
-	}
-
-	private List<OntologyTerm> getInternationalTerms(TermId id){
-		return null;
+		return this.termRepository.search(q).stream().sorted(Comparator.comparing((OntologyTerm term) -> !term.getName().startsWith(q))
+						.thenComparing(OntologyTerm::getName)).collect(Collectors.toList());
 	}
 }

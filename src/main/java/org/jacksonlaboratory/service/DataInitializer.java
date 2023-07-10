@@ -26,7 +26,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +36,8 @@ import java.util.stream.Collectors;
 public class DataInitializer implements ApplicationEventListener<ApplicationStartupEvent> {
 
 	private final static Logger log = LoggerFactory.getLogger(DataInitializer.class);
-
-	private final SynchronousTransactionManager<Connection> transactionManager;
-	private final ClassPathResourceLoader loader;
 	private final TermRepository termRepository;
 	private final TranslationRepository translationRepository;
-
-	private final EntityManager entityManager;
 
 	@Value("${load}")
 	boolean shouldLoad;
@@ -52,13 +46,10 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 	@Value("${international}")
 	boolean international;
 
-	public DataInitializer(SynchronousTransactionManager<Connection> transactionManager, TermRepository termRepository,
-						   TranslationRepository translationRepository, EntityManager entityManager) {
-		this.loader = new ResourceResolver().getLoader(ClassPathResourceLoader.class).orElseThrow();
-		this.transactionManager = transactionManager;
+	public DataInitializer(TermRepository termRepository,
+						   TranslationRepository translationRepository) {
 		this.termRepository = termRepository;
 		this.translationRepository = translationRepository;
-		this.entityManager = entityManager;
 	}
 
 	@Override

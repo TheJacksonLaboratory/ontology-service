@@ -5,7 +5,6 @@ import org.jacksonlaboratory.model.PredicateType;
 import org.jacksonlaboratory.model.TranslationStatus;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.model.entity.Translation;
-import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.util.*;
 import java.util.stream.Collectors;
