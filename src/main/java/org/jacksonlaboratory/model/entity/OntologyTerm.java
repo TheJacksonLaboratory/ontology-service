@@ -1,5 +1,8 @@
 package org.jacksonlaboratory.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
@@ -9,16 +12,17 @@ import org.monarchinitiative.phenol.ontology.data.TermSynonym;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Entity
-@Serdeable
 @NamedNativeQuery(
 		name="searchQuery",
 		query = "SELECT ONTOLOGY_TERM.* FROM FTL_SEARCH_DATA(:param1, 0, 0) AS FT LEFT JOIN ONTOLOGY_TERM ON ONTOLOGY_TERM.uid = FT.KEYS[1];",
 		resultClass = OntologyTerm.class)
+@Serdeable
 public class OntologyTerm {
 
 	@Id
@@ -40,6 +44,9 @@ public class OntologyTerm {
 	private String synonyms;
 
 	private String xrefs;
+
+	@Transient
+	private List<Translation> translations;
 
 	public OntologyTerm() {
 
@@ -64,27 +71,45 @@ public class OntologyTerm {
 		return uid;
 	}
 
-	public String id() {
+	public String getId() {
 		return id.toString();
 	}
 
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
-	public String definition() {
+	public String getDefinition() {
 		return definition;
 	}
 
-	public String comment() {
+	public String getComment() {
 		return comment;
 	}
 
-	public List<String> synonyms() {
-		return Arrays.asList(synonyms.split(","));
+	public List<String> getSynonyms() {
+		if(this.synonyms.isBlank()){
+			return Collections.emptyList();
+		} else {
+			return Arrays.asList(synonyms.split(","));
+		}
 	}
 
-	public List<String> xrefs() {
-		return Arrays.asList(xrefs.split(","));
+	public List<String> getXrefs() {
+		if(xrefs.isBlank()){
+			return Collections.emptyList();
+		} else {
+			return Arrays.asList(xrefs.split(","));
+		}
+	}
+
+	@Transient
+	@JsonGetter(value = "translations")
+	public List<Translation> getTranslations() {
+		return translations;
+	}
+
+	public void setTranslation(List<Translation> translations) {
+		this.translations = translations;
 	}
 }

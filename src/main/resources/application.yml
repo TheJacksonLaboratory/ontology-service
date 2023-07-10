@@ -18,7 +18,7 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: create-drop
-        show_sql: true
+        show_sql: false
 flyway:
   datasources:
     default:
@@ -30,5 +30,6 @@ netty:
 api-url:
   prefix: /api/v1
 ontology: ${ONTOLOGY:unknown}
-load: false
-international: false
+load: true
+international: true
+

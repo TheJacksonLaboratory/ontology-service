@@ -22,6 +22,7 @@ import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +37,14 @@ import java.util.stream.Collectors;
 public class DataInitializer implements ApplicationEventListener<ApplicationStartupEvent> {
 
 	private final static Logger log = LoggerFactory.getLogger(DataInitializer.class);
+
 	private final SynchronousTransactionManager<Connection> transactionManager;
 	private final ClassPathResourceLoader loader;
 	private final TermRepository termRepository;
 	private final TranslationRepository translationRepository;
+
+	private final EntityManager entityManager;
+
 	@Value("${load}")
 	boolean shouldLoad;
 	@Value("${ontology}")
@@ -48,18 +53,19 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 	boolean international;
 
 	public DataInitializer(SynchronousTransactionManager<Connection> transactionManager, TermRepository termRepository,
-						   TranslationRepository translationRepository) {
+						   TranslationRepository translationRepository, EntityManager entityManager) {
 		this.loader = new ResourceResolver().getLoader(ClassPathResourceLoader.class).orElseThrow();
 		this.transactionManager = transactionManager;
 		this.termRepository = termRepository;
 		this.translationRepository = translationRepository;
+		this.entityManager = entityManager;
 	}
 
 	@Override
 	@Transactional
 	public void onApplicationEvent(ApplicationStartupEvent event) {
 		if(shouldLoad && !ontology.isBlank()){
-			log.info("Initializing sample data...");
+			log.info("Initializing ontology data..");
 			File file = new File(String.format("data/%s-simple-non-classified.json", ontology));
 			if (file.exists()){
 				try {
@@ -67,18 +73,20 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 					this.termRepository.configure();
 					List<OntologyTerm> terms = ontology.getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
 					this.termRepository.saveAll(terms);
+					log.info("Finished loading ontology data..");
 					if (international){
-						log.info("Internationalization enabled.");
+						log.info("Internationalization enabled & loading..");
 						BabelonNavigator navigator = BabelonIngestor.of().load(new File("data/hp-all.babelon.tsv").toPath());
 						terms.forEach(t -> {
 							List<Translation> translationsByTerm = new ArrayList<>();
-							Optional<Map<Language, List<BabelonLine>>> linesByLanguage = navigator.getAggregatedLanguageLinesById(TermId.of(t.id()));
+							Optional<Map<Language, List<BabelonLine>>> linesByLanguage = navigator.getAggregatedLanguageLinesById(TermId.of(t.getId()));
 							linesByLanguage.ifPresent(languageListMap -> languageListMap.forEach((key, value) -> {
-								Translation translation = TranslationProcessor.processTranslation(t, key, value);
-								translationsByTerm.add(translation);
+								List<Translation> translation = TranslationProcessor.processTranslation(t, key, value);
+								translationsByTerm.addAll(translation);
 							}));
 							this.translationRepository.saveAll(translationsByTerm);
 						});
+						log.info("Internationalization finished..");
 					}
 				} catch(IOException e){
 					throw new RuntimeException(e);
@@ -91,6 +99,4 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 			log.info("Skipping initializing data...");
 		}
 	}
-
-
 }

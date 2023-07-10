@@ -38,8 +38,8 @@ public class BabelonLine {
 			Language translation_language = Language.valueOf(fields[1].toUpperCase());
 			TermId id = TermId.of(fields[2]);
 			PredicateType predicate_type = PredicateType.fromTermId(TermId.of(fields[3]));
-			String source_text = fields[4];
-			String translation_text = fields[5];
+			String source_text = fields[4].trim();
+			String translation_text = fields[5].trim();
 			TranslationStatus translationStatus = TranslationStatus.valueOf(fields[6].toUpperCase());
 			return of(source_language, translation_language, id, predicate_type, source_text, translation_text, translationStatus);
 		} catch (RuntimeException e){

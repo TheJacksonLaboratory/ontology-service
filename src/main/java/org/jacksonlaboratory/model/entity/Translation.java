@@ -1,12 +1,12 @@
 package org.jacksonlaboratory.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.Language;
 import org.jacksonlaboratory.model.TranslationStatus;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Serdeable
@@ -14,15 +14,18 @@ public class Translation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	@JsonIgnore
+	private Long id;
 
 	@ManyToOne(targetEntity = OntologyTerm.class)
-	private Long term_uuid;
+	@JsonIgnore
+	private OntologyTerm term;
 
 	private Language language;
 
 	private String name;
 
+	@Column(columnDefinition = "text")
 	private String definition;
 
 	private TranslationStatus status;
@@ -31,24 +34,24 @@ public class Translation {
 
 	}
 
-	public Translation(Long term_uuid, Language language, String name, String definition, TranslationStatus status) {
-		this.term_uuid = term_uuid;
+	public Translation(OntologyTerm term, Language language, String name, String definition, TranslationStatus status) {
+		this.term = term;
 		this.language = language;
 		this.name = name;
 		this.definition = definition;
 		this.status = status;
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID uuid) {
-		this.id = uuid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setTerm_uuid(Long term_uuid) {
-		this.term_uuid = term_uuid;
+	public void setTerm(OntologyTerm term) {
+		this.term = term;
 	}
 
 	public void setLanguage(Language language) {
@@ -63,8 +66,8 @@ public class Translation {
 		this.definition = definition;
 	}
 
-	public Long getTerm_uuid() {
-		return term_uuid;
+	public OntologyTerm getTerm() {
+		return term;
 	}
 
 	public Language getLanguage() {
@@ -92,11 +95,11 @@ public class Translation {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Translation that = (Translation) o;
-		return Objects.equals(id, that.id) && Objects.equals(term_uuid, that.term_uuid) && language == that.language && Objects.equals(name, that.name) && Objects.equals(definition, that.definition);
+		return Objects.equals(id, that.id) && Objects.equals(term, that.term) && language == that.language && Objects.equals(name, that.name) && Objects.equals(definition, that.definition);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, term_uuid, language, name, definition);
+		return Objects.hash(id, term, language, name, definition);
 	}
 }

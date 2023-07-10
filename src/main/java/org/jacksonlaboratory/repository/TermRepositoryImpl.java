@@ -1,6 +1,5 @@
 package org.jacksonlaboratory.repository;
 
-import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
@@ -15,17 +14,16 @@ import java.util.Optional;
 @Singleton
 public class TermRepositoryImpl implements TermRepository {
 	private final EntityManager entityManager;
-	private final ApplicationConfiguration applicationConfiguration;
 
-	public TermRepositoryImpl(EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
+	public TermRepositoryImpl(EntityManager entityManager) {
 		this.entityManager = entityManager;
-		this.applicationConfiguration = applicationConfiguration;
 	}
 
 	@Override
 	@ReadOnly
-	public Optional<OntologyTerm> findById(TermId id) {
-		return Optional.ofNullable(entityManager.find(OntologyTerm.class, id));
+	public Optional<OntologyTerm> findByTermId(TermId id) {
+		OntologyTerm term = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id = :param1", OntologyTerm.class).setParameter("param1", id).getSingleResult();
+		return Optional.ofNullable(term);
 	}
 
 	/*
@@ -50,11 +48,12 @@ public class TermRepositoryImpl implements TermRepository {
 	@Override
 	@Transactional
 	public void saveAll(List<OntologyTerm> terms){
-		for (OntologyTerm term:
-			 terms
-		) {
-			this.entityManager.persist(term);
-			this.entityManager.flush();
+		for(var i=0; i < terms.size(); i++){
+			if ( i > 0 && i % 5000 == 0){
+				this.entityManager.flush();
+				this.entityManager.clear();
+			}
+			this.entityManager.persist(terms.get(i));
 		}
 	}
 
