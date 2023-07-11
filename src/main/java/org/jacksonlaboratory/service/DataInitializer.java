@@ -2,10 +2,7 @@ package org.jacksonlaboratory.service;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.context.event.ApplicationEventListener;
-import io.micronaut.core.io.ResourceResolver;
-import io.micronaut.core.io.scan.ClassPathResourceLoader;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
-import io.micronaut.transaction.SynchronousTransactionManager;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.ingest.BabelonIngestor;
 import org.jacksonlaboratory.ingest.BabelonLine;
@@ -18,11 +15,9 @@ import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.Ontology;
-import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
@@ -61,23 +56,24 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 			if (file.exists()){
 				try {
 					Ontology ontology = OntologyLoader.loadOntology(file);
-					this.termRepository.configure();
+					this.termRepository.create_index();
 					List<OntologyTerm> terms = ontology.getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
 					this.termRepository.saveAll(terms);
 					log.info("Finished loading ontology data..");
 					if (international){
-						log.info("Internationalization enabled & loading..");
+						log.info("Internationalization enabled..");
+						log.info("Loading Translations..")
 						BabelonNavigator navigator = BabelonIngestor.of().load(new File("data/hp-all.babelon.tsv").toPath());
 						terms.forEach(t -> {
 							List<Translation> translationsByTerm = new ArrayList<>();
-							Optional<Map<Language, List<BabelonLine>>> linesByLanguage = navigator.getAggregatedLanguageLinesById(TermId.of(t.getId()));
+							Optional<Map<Language, List<BabelonLine>>> linesByLanguage = navigator.getAggregatedLanguageLinesById(t.getTermId());
 							linesByLanguage.ifPresent(languageListMap -> languageListMap.forEach((key, value) -> {
 								List<Translation> translation = TranslationProcessor.processTranslation(t, key, value);
 								translationsByTerm.addAll(translation);
 							}));
 							this.translationRepository.saveAll(translationsByTerm);
 						});
-						log.info("Internationalization finished..");
+						log.info("Translations finished..");
 					}
 				} catch(IOException e){
 					throw new RuntimeException(e);

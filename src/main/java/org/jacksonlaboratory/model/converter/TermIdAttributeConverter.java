@@ -1,16 +1,15 @@
 package org.jacksonlaboratory.model.converter;
 
+import jakarta.inject.Singleton;
 import org.monarchinitiative.phenol.ontology.data.TermId;
-
 import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
-@Converter
+@Singleton
 public class TermIdAttributeConverter implements AttributeConverter<TermId, String> {
 
 	@Override
 	public String convertToDatabaseColumn(TermId attribute) {
-		return attribute.toString();
+		return attribute.getValue();
 	}
 
 	@Override

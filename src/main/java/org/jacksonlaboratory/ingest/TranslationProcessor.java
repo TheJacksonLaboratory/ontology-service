@@ -37,7 +37,7 @@ public class TranslationProcessor {
 				if (!line.status().equals(status)){
 					status = line.status();
 				}
-				translations.add( new Translation(term, language, label, definition, status));
+				translations.add(new Translation(term, language, label, definition, status));
 		}
 		return translations;
 	}

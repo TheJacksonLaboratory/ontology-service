@@ -1,8 +1,6 @@
 package org.jacksonlaboratory.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
@@ -20,18 +18,17 @@ import java.util.stream.Collectors;
 @Entity
 @NamedNativeQuery(
 		name="searchQuery",
-		query = "SELECT ONTOLOGY_TERM.* FROM FTL_SEARCH_DATA(:param1, 0, 0) AS FT LEFT JOIN ONTOLOGY_TERM ON ONTOLOGY_TERM.uid = FT.KEYS[1];",
+		query = "SELECT ONTOLOGY_TERM.* FROM FTL_SEARCH_DATA(:param1, 0, 0) AS FT LEFT JOIN ONTOLOGY_TERM ON ONTOLOGY_TERM.id = FT.KEYS[1];",
 		resultClass = OntologyTerm.class)
 @Serdeable
 public class OntologyTerm {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long uid;
+	private Long id;
 
-	@Column(columnDefinition = "varchar")
 	@Convert(converter = TermIdAttributeConverter.class)
-	private TermId id;
+	private TermId termId;
 
 	private String name;
 
@@ -52,14 +49,14 @@ public class OntologyTerm {
 
 	}
 	public OntologyTerm(TermId id, String name, String definition, String comment) {
-		this.id = id;
+		this.termId = id;
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
 	}
 
 	public OntologyTerm(Term term) {
-		this.id = term.id();
+		this.termId = term.id();
 		this.name = term.getName();
 		this.definition = term.getDefinition();
 		this.comment = term.getComment();
@@ -67,12 +64,12 @@ public class OntologyTerm {
 		this.xrefs = term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(","));
 	}
 
-	public Long uid() {
-		return uid;
+	public Long getId() {
+		return id;
 	}
 
-	public String getId() {
-		return id.toString();
+	public TermId getTermId() {
+		return termId;
 	}
 
 	public String getName() {
@@ -101,6 +98,30 @@ public class OntologyTerm {
 		} else {
 			return Arrays.asList(xrefs.split(","));
 		}
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDefinition(String definition) {
+		this.definition = definition;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setSynonyms(String synonyms) {
+		this.synonyms = synonyms;
+	}
+
+	public void setXrefs(String xrefs) {
+		this.xrefs = xrefs;
+	}
+
+	public void setTranslations(List<Translation> translations) {
+		this.translations = translations;
 	}
 
 	@Transient
