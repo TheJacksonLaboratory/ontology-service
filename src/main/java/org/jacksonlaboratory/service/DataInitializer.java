@@ -62,7 +62,7 @@ public class DataInitializer implements ApplicationEventListener<ApplicationStar
 					log.info("Finished loading ontology data..");
 					if (international){
 						log.info("Internationalization enabled..");
-						log.info("Loading Translations..")
+						log.info("Loading Translations..");
 						BabelonNavigator navigator = BabelonIngestor.of().load(new File("data/hp-all.babelon.tsv").toPath());
 						terms.forEach(t -> {
 							List<Translation> translationsByTerm = new ArrayList<>();

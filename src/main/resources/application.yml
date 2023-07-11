@@ -28,8 +28,8 @@ netty:
     allocator:
       max-order: 3
 api-url:
-  prefix: /api/v1
+  prefix: /api/
 ontology: ${ONTOLOGY:unknown}
 load: true
-international: true
+international: false
 

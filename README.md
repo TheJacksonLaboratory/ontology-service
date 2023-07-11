@@ -1,10 +1,17 @@
 ## Micronaut 3.8.6 Documentation
 
-- [User Guide](https://docs.micronaut.io/3.8.6/guide/index.html)
-- [API Reference](https://docs.micronaut.io/3.8.6/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/3.8.6/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
+## Development
+
+### Running
+Parameters to run application.
+    
+- ONTOLOGY [unknown]
+- international [false]
+- load [true]
+```sh
+  ./gradlew run --args='--international=true --ONTOLOGY=hp'
+```
+
 
 ## Google Cloud Run GitHub Workflow
 
@@ -49,33 +56,3 @@ Call the api endpoint:
 ```
 curl https://hpoweb-__________run.app/hpoweb
 ```
-
-
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
-## Feature http-client documentation
-
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
-
-
-## Feature test-resources documentation
-
-- [Micronaut Test Resources documentation](https://micronaut-projects.github.io/micronaut-test-resources/latest/guide/)
-
-
-## Feature openapi documentation
-
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
-
-- [https://www.openapis.org](https://www.openapis.org)
-
-
-## Feature github-workflow-google-cloud-run documentation
-
-- [https://docs.github.com/en/free-pro-team@latest/actions](https://docs.github.com/en/free-pro-team@latest/actions)
-
-
-## Feature jdbc-hikari documentation
-
-- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
-
-
