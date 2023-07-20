@@ -1,10 +1,29 @@
 name: Google Cloud Run Java CD
-on: [pull_request]
-
+on:
+  workflow_dispatch:
+    inputs:
+      ontology:
+        description: 'The ontology to use.'
+        required: true
+        type: string
+      international:
+        description: 'Is the ontology babelon international?'
+        default: false
+        type: boolean
+      load:
+        description: 'Should load the data?'
+        default: true
+        type: boolean
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-  GCLOUD_REGION: europe-west3
-  GCLOUD_GCR: eu.gcr.io
+  GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+  GCLOUD_REGION: us-central1
+  GCLOUD_GCR: us-docker.pkg.dev
+  ONTOLOGY: ${{ inputs.ontology }}
+  ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
+  ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
+  SERVICE_NAME: ontology-service-${{ inputs.ontology }}
+
 
 jobs:
   build:
@@ -30,22 +49,25 @@ jobs:
           version: '290.0.1'
           service_account_key: ${{ secrets.GCLOUD_SA_KEY }}
           project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+      - name: Get ontology data
+        run: |
+          bash ontology.sh hp
       - name: Docker Login
         run: |
-          gcloud auth configure-docker
+          gcloud auth configure-docker us-docker.pkg.dev
       - name: Build And Push Docker Image
         env:
           GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/hpoweb" | sed -e 's#//#/#' -e 's#^/##'`
+          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed -e 's#//#/#' -e 's#^/##'`
           ./gradlew check dockerPush --no-daemon
       - name: Deploy Cloud Run
         run: |
-          DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep hpoweb)
+          DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
           DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" "${DOCKER_IMAGE_REPOSITORY}" )
 
-          gcloud run deploy hpoweb --quiet \
+          gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json
           echo "Invoke endpoint:"
