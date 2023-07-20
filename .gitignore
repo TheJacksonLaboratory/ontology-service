@@ -4,6 +4,7 @@ Thumbs.db
 build/
 target/
 out/
+data/
 .micronaut/
 .idea
 *.iml
