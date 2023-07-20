@@ -64,6 +64,7 @@ jobs:
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed -e 's#//#/#' -e 's#^/##'`
+          echo ${{DOCKER_IMAGE}} | sed 's/./& /g'
           ./gradlew check dockerPush --no-daemon
       - name: Deploy Cloud Run
         run: |
