@@ -49,8 +49,14 @@ java {
     targetCompatibility = JavaVersion.toVersion("11")
 }
 
-tasks {
+tasks.register('prepareData') {
+    copy {
+        from "${projectDir}/data/"
+        into "build/docker/main/data/"
+    }
+}
 
+tasks {
     dockerfile {
         copyFile("data/", "data/")
         environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}",
@@ -66,6 +72,9 @@ tasks {
         images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
     }
 }
+
+dockerfile.dependsOn('prepareData')
+
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
