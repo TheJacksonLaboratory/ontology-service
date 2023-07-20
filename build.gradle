@@ -24,9 +24,10 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.flywaydb:flyway-mysql")
-    runtimeOnly("com.h2database:h2")
-
-
+    runtimeOnly("com.h2database:h2:2.1.214")
+    implementation('org.apache.lucene:lucene-core:8.5.2')
+    implementation('org.apache.lucene:lucene-queryparser:8.5.2')
+    implementation 'org.hibernate.search:hibernate-search-mapper-orm:6.1.8.Final'
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.swagger.core.v3:swagger-annotations")
@@ -49,6 +50,14 @@ java {
 }
 
 tasks {
+
+    dockerfile {
+        copyFile("data/", "data/")
+        environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}",
+                             'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}",
+                             'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}"] )
+    }
+
     dockerBuild {
         images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
     }

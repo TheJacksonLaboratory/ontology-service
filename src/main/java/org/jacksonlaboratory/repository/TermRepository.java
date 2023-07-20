@@ -1,11 +1,20 @@
 package org.jacksonlaboratory.repository;
 
-import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
-import org.jacksonlaboratory.model.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface TermRepository extends CrudRepository<OntologyTerm, TermId> {
+public interface TermRepository {
+
+	Optional<OntologyTerm> findByTermId(@NotBlank TermId id);
+	List<OntologyTerm> search(@NotBlank String query);
+
+	OntologyTerm save(@NotBlank OntologyTerm term);
+
+	void saveAll(@NotBlank List<OntologyTerm> terms);
+
+	void configure();
 }
