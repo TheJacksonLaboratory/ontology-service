@@ -17,7 +17,7 @@ on:
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
   GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
-  GCLOUD_REGION: us-central1
+  GCLOUD_REGION: us-east1
   GCLOUD_GCR: us-docker.pkg.dev
   ONTOLOGY: ${{ inputs.ontology }}
   ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
