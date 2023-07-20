@@ -17,8 +17,8 @@ on:
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
   GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
-  GCLOUD_REGION: us-central1
-  GCLOUD_GCR: us-docker.pkg.dev
+  GCLOUD_REGION: us-east1
+  GCLOUD_GCR: us-east1-docker.pkg.dev
   ONTOLOGY: ${{ inputs.ontology }}
   ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
   ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
@@ -57,13 +57,14 @@ jobs:
           bash ontology.sh hp
       - name: Docker Login
         run: |
-          gcloud auth configure-docker us-docker.pkg.dev
+          gcloud auth configure-docker us-east1-docker.pkg.dev
       - name: Build And Push Docker Image
         env:
           GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed -e 's#//#/#' -e 's#^/##'`
+          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed -e 's#//#/#' -e 's#^/##'`
+          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed 's/./& /g'
           ./gradlew check dockerPush --no-daemon
       - name: Deploy Cloud Run
         run: |
@@ -72,7 +73,9 @@ jobs:
 
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
-            --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json
+            --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
+            --memory 4Gi --cpu 2
+      
           echo "Invoke endpoint:"
           gcloud run services list --platform managed --format json | jq -r \
             '.[] | select(.metadata.name == "google-cloud-run-maven-test") | .status.address.url'

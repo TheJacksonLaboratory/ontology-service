@@ -30,11 +30,6 @@ netty:
 api-url:
   prefix: /api/v1
 ontology: ${ONTOLOGY:unknown}
-<<<<<<< Updated upstream
-load: true
-international: true
-=======
 load: ${ONTOLOGY_SERVICE_LOAD:true}
 international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
->>>>>>> Stashed changes
 
