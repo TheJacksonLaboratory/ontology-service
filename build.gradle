@@ -63,6 +63,7 @@ tasks {
         environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}",
                              'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}",
                              'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}"] )
+        entryPoint("java -Xmx6g -Xms1024m -jar /home/app/application.jar")
     }
 
     dockerBuild {
