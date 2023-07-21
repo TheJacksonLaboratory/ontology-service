@@ -12,7 +12,7 @@
     <!-- Set log level of Hibernate to WARN level -->
     <logger name="org.hibernate.SQL" level="WARN" />
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
