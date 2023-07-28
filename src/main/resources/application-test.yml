@@ -29,7 +29,7 @@ netty:
       max-order: 3
 api-url:
   prefix: /api/v1
-ontology: ${ONTOLOGY:unknown}
+ontology: ${ONTOLOGY}
 load: ${ONTOLOGY_SERVICE_LOAD:false}
 international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
 

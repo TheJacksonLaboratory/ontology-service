@@ -26,6 +26,12 @@ public class TermRepositoryImpl implements TermRepository {
 		return Optional.ofNullable(term);
 	}
 
+	@Override
+	public Optional<List<OntologyTerm>> findByTermIdIn(List<TermId> ids) {
+		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id in :param1", OntologyTerm.class).setParameter("param1", ids).getResultList();
+		return Optional.ofNullable(terms);
+	}
+
 	/*
 		Use our h2 lucene index and a search term to find objects similar in our tables. Currently,
 		we will only index by ontology id, term and synonym.

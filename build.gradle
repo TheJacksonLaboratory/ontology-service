@@ -34,9 +34,15 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.2")
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut:micronaut-validation")
-    implementation("org.monarchinitiative.phenol:phenol-core:2.0.0-RC5")
-    implementation("org.monarchinitiative.phenol:phenol-io:2.0.0-RC5")
-    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.0-RC5")
+    implementation("org.monarchinitiative.phenol:phenol-core:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    implementation("org.monarchinitiative.phenol:phenol-io:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
 }
 
