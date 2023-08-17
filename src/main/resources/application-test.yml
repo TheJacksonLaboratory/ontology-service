@@ -27,6 +27,11 @@ netty:
   default:
     allocator:
       max-order: 3
+jackson:
+  json-view:
+    enabled: true
+  mapper:
+    defaultViewInclusion: false
 api-url:
   prefix: /api/v1
 ontology: ${ONTOLOGY}

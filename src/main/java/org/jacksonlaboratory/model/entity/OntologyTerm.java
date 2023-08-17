@@ -1,19 +1,20 @@
 package org.jacksonlaboratory.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
 import org.monarchinitiative.phenol.ontology.data.Term;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.ontology.data.TermSynonym;
+import org.jacksonlaboratory.view.Views;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,22 +28,29 @@ public class OntologyTerm {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Term.class)
 	private Long uid;
 
+	@JsonView(Views.GraphOnly.class)
 	@Column(columnDefinition = "varchar")
 	@Convert(converter = TermIdAttributeConverter.class)
 	private TermId id;
 
+	@JsonView(Views.GraphOnly.class)
 	private String name;
 
 	@Column(columnDefinition = "text")
+	@JsonView(Views.Term.class)
 	private String definition;
 	@Column(columnDefinition = "text")
+	@JsonView(Views.Term.class)
 	private String comment;
 
 	@Column(columnDefinition = "text")
+	@JsonView(Views.Term.class)
 	private String synonyms;
 
+	@JsonView(Views.Term.class)
 	private String xrefs;
 
 	@Transient
@@ -56,6 +64,8 @@ public class OntologyTerm {
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
+		this.synonyms = "";
+		this.xrefs = "";
 	}
 
 	public OntologyTerm(Term term) {
@@ -111,5 +121,18 @@ public class OntologyTerm {
 
 	public void setTranslation(List<Translation> translations) {
 		this.translations = translations;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		OntologyTerm that = (OntologyTerm) o;
+		return Objects.equals(uid, that.uid) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(definition, that.definition) && Objects.equals(comment, that.comment) && Objects.equals(synonyms, that.synonyms) && Objects.equals(xrefs, that.xrefs) && Objects.equals(translations, that.translations);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uid, id, name, definition, comment, synonyms, xrefs, translations);
 	}
 }

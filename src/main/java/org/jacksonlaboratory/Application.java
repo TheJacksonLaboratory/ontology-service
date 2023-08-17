@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 @OpenAPIDefinition(
     info = @Info(
-            title = "ontology-service-${ontology}",
+            title = "ontology-service",
             version = "0.0"
     )
 )
