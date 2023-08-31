@@ -30,7 +30,7 @@ class OntologyTermSpec extends Specification {
                 .writeValueAsString(term);
 
         result.contains("my name")
-        !result.contains("def")
+        result.contains("def")
     }
 
 }
