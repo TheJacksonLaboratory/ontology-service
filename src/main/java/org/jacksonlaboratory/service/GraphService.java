@@ -2,9 +2,11 @@ package org.jacksonlaboratory.service;
 
 import io.micronaut.context.annotation.Property;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
+import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.MinimalOntology;
 import org.monarchinitiative.phenol.ontology.data.TermId;
@@ -26,21 +28,38 @@ public class GraphService {
 	private final static Logger log = LoggerFactory.getLogger(GraphService.class);
 	private MinimalOntology ontology;
 	private final TermRepository termRepository;
+	private final TranslationRepository translationRepository;
 
 	@Property(name = "ontology") String ontologyName;
 
-	public GraphService(TermRepository termRepository) {
+	@Value("${international}")
+	boolean international;
+
+	public GraphService(TermRepository termRepository, TranslationRepository translationRepository) {
 		this.termRepository = termRepository;
+		this.translationRepository = translationRepository;
 	}
 
 	public List<OntologyTerm> getParents(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
-		return this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+		if (international){
+			for (OntologyTerm term: termList) {
+				 term.setTranslation(this.translationRepository.findAllByTerm(term));
+			}
+		}
+		return termList;
 	}
 
 	public List<OntologyTerm> getChildren(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
-		return this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+		if (international){
+			for (OntologyTerm term: termList) {
+				term.setTranslation(this.translationRepository.findAllByTerm(term));
+			}
+		}
+		return termList;
 	}
 
 	public List<OntologyTerm> getAncestors(TermId termId) {

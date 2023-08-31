@@ -73,8 +73,8 @@ public class OntologyTerm {
 		this.name = term.getName();
 		this.definition = term.getDefinition();
 		this.comment = term.getComment();
-		this.synonyms = term.getSynonyms().stream().filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(","));
-		this.xrefs = term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(","));
+		this.synonyms = term.getSynonyms().stream().filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(";"));
+		this.xrefs = term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(";"));
 	}
 
 	public Long uid() {
@@ -101,7 +101,7 @@ public class OntologyTerm {
 		if(this.synonyms.isBlank()){
 			return Collections.emptyList();
 		} else {
-			return Arrays.asList(synonyms.split(","));
+			return Arrays.asList(synonyms.split(";"));
 		}
 	}
 
@@ -109,7 +109,7 @@ public class OntologyTerm {
 		if(xrefs.isBlank()){
 			return Collections.emptyList();
 		} else {
-			return Arrays.asList(xrefs.split(","));
+			return Arrays.asList(xrefs.split(";"));
 		}
 	}
 

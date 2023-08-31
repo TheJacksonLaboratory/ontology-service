@@ -8,14 +8,14 @@ import java.sql.SQLException;
 
 @OpenAPIDefinition(
     info = @Info(
-            title = "ontology-service",
-            version = "0.0"
+            title = "ontology-service-${ontology}",
+            description = "A restful service for the ${ontology} ontology.",
+            contact = @Contact(name = "Michael Gargano", email = "Michael.Gargano@jax.org")
     )
 )
 public class Application {
 
-    public static void main(String[] args) throws SQLException {
-        //Server.createWebServer().start();
+    public static void main(String[] args) {
         Micronaut.build(args).eagerInitSingletons(true).mainClass(Application.class).start();
     }
 }

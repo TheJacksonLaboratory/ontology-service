@@ -1,6 +1,14 @@
 micronaut:
   application:
     name: ontology-service-${ONTOLOGY:unknown}
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /${api-url.prefix}/${ontology}/docs/**
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
@@ -33,8 +41,7 @@ jackson:
   mapper:
     defaultViewInclusion: false
 api-url:
-  prefix: /api/v1
+  prefix: /api
 ontology: ${ONTOLOGY}
 load: ${ONTOLOGY_SERVICE_LOAD:false}
 international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
-

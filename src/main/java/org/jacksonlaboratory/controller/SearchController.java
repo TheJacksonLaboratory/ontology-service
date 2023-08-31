@@ -19,6 +19,11 @@ public class SearchController {
 		this.termService = termService;
 	}
 
+	 /**
+	 * Search for ontology term, id, synonym
+     * @param query The search value
+     * @return List of matching ontology terms
+     */
 	@JsonView(Views.Term.class)
 	@Get(uri="/", produces="application/json")
 	public List<OntologyTerm> search(@QueryValue("q") String query) {

@@ -22,12 +22,21 @@ public class TermController {
         this.graphService = graphService;
     }
 
+    /**
+     * Get all terms
+     * @return List of all ontology terms
+     */
     @JsonView(Views.Term.class)
     @Get(uri="/", produces="application/json")
     public List<OntologyTerm> all() {
         return this.termService.getAllOntologyTerms();
     }
 
+    /**
+     * Get a term by ontology id
+     * @param id The ontology term id
+     * @return The term or null.
+     */
     @JsonView(Views.Term.class)
     @Get(uri="/{id}", produces="application/json")
     public OntologyTerm details(@PathVariable TermId id) {
@@ -35,12 +44,22 @@ public class TermController {
         return term.orElse(null);
     }
 
+    /**
+     * Get the parents of the ontology id
+     * @param id The ontology term id
+     * @return The parents of the term id
+     */
     @JsonView(Views.GraphOnly.class)
     @Get(uri="/{id}/parents", produces="application/json")
     public List<OntologyTerm> ancestors(@PathVariable TermId id){
         return this.graphService.getParents(id);
     }
 
+    /**
+     * Get the children of the ontology id
+     * @param id The ontology term id
+     * @return The children of the term id
+     */
     @JsonView(Views.GraphOnly.class)
     @Get(uri="/{id}/children", produces="application/json")
     public List<OntologyTerm> children(@PathVariable TermId id){
