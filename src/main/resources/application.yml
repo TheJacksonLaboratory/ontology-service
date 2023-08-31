@@ -1,6 +1,18 @@
 micronaut:
+  server:
+    port: 8081
+    cors:
+      enabled: true
   application:
     name: ontology-service-${ONTOLOGY:unknown}
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /${api-url.prefix}/${ontology}/docs/**
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
@@ -27,9 +39,11 @@ netty:
   default:
     allocator:
       max-order: 3
+jackson:
+  json-view:
+    enabled: true
 api-url:
-  prefix: /api/v1
-ontology: ${ONTOLOGY:unknown}
+  prefix: /api
+ontology: ${ONTOLOGY}
 load: ${ONTOLOGY_SERVICE_LOAD:true}
 international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
-

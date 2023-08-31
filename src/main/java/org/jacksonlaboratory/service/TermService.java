@@ -8,6 +8,7 @@ import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,10 @@ public class TermService {
 			return termOptional;
 		}
 		return Optional.empty();
+	}
+
+	public List<OntologyTerm> getAllOntologyTerms(){
+		return this.termRepository.findAll().orElse(Collections.emptyList());
 	}
 
 	public List<OntologyTerm> searchOntologyTerm(String q){

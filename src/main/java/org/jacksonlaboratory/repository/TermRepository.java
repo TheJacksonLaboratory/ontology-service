@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public interface TermRepository {
 
+	Optional<List<OntologyTerm>> findAll();
 	Optional<OntologyTerm> findByTermId(@NotBlank TermId id);
+
+	Optional<List<OntologyTerm>> findByTermIdIn(@NotBlank List<TermId> ids);
+
 	List<OntologyTerm> search(@NotBlank String query);
 
 	OntologyTerm save(@NotBlank OntologyTerm term);

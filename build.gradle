@@ -29,14 +29,20 @@ dependencies {
     implementation('org.apache.lucene:lucene-queryparser:8.5.2')
     implementation 'org.hibernate.search:hibernate-search-mapper-orm:6.1.8.Final'
     implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.swagger.core.v3:swagger-annotations")
-    implementation("io.micronaut.serde:micronaut-serde-jackson:1.5.2")
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut:micronaut-validation")
-    implementation("org.monarchinitiative.phenol:phenol-core:2.0.0-RC5")
-    implementation("org.monarchinitiative.phenol:phenol-io:2.0.0-RC5")
-    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.0-RC5")
+    implementation("org.monarchinitiative.phenol:phenol-core:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    implementation("org.monarchinitiative.phenol:phenol-io:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.2"){
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
 }
 
@@ -44,6 +50,7 @@ dependencies {
 application {
     mainClass.set("org.jacksonlaboratory.Application")
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
     targetCompatibility = JavaVersion.toVersion("11")
@@ -85,6 +92,11 @@ micronaut {
         incremental(true)
         annotations("org.jacksonlaboratory.*")
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY}/docs/".toString()
 }
 
 
