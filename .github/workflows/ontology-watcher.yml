@@ -20,10 +20,10 @@ jobs:
         with:
           cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest | jq -r '.tag_name'"
 
-       - name: Get latest SHA
-         uses: sergeysova/jq-action@v2
-         id: sha
-         with:
+      - name: Get latest SHA
+        uses: sergeysova/jq-action@v2
+        id: sha
+        with:
            cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha'"
 
       - name: Show my version
