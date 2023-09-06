@@ -33,5 +33,5 @@ jobs:
 
       - name: Compare and configure
         run: |
-          echo "${steps.sha.outputs.value}"
-          echo "${steps.existing.outputs.value}"
+          echo "${{steps.sha.outputs.value}}"
+          echo "${{steps.existing.outputs.value}}"
