@@ -26,12 +26,10 @@ jobs:
         with:
            cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha'"
 
-      - name: Show my version
-        run: 'echo "version ${{ steps.version.outputs.value }}"'
       - name:  Get existing SHA for service
         id: existing
         run:  |
-          echo "value=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')" >> $GITHUB_OUTPUT
+          echo '::set-output name=value::$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')'
 
       - name: Compare and configure
         run: |
