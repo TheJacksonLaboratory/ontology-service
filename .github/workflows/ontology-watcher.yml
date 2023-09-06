@@ -30,7 +30,7 @@ jobs:
         id: existing
         run:  |
           EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')
-          echo '::set-output name=value::$EXISTING'
+          echo "::set-output name=value::$EXISTING"
 
       - name: Compare and configure
         run: |
