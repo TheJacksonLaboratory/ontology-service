@@ -13,14 +13,13 @@ jobs:
 
       - name: Setup Google Cloud CLI
         uses: 'google-github-actions/setup-gcloud@v1'
-        
 
       - name: Get latest tag_name
         uses: sergeysova/jq-action@v2
         id: tag
         with:
           cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest | jq -r '.tag_name'"
-      
+
        - name: Get latest SHA
          uses: sergeysova/jq-action@v2
          id: sha
@@ -38,5 +37,3 @@ jobs:
         run: |
           echo "${steps.sha.outputs.value}"
           echo "${steps.existing.outputs.value}"
-        
-
