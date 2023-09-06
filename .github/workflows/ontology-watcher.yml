@@ -24,12 +24,13 @@ jobs:
         uses: sergeysova/jq-action@v2
         id: sha
         with:
-           cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha'"
+          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
 
       - name:  Get existing SHA for service
         id: existing
         run:  |
-          echo '::set-output name=value::$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')'
+          EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')
+          echo '::set-output name=value::$EXISTING'
 
       - name: Compare and configure
         run: |
