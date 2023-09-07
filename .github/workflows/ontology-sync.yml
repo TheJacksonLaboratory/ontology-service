@@ -41,7 +41,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: watcher
-    if: needs.watcher.outputs.deploy == 'true'
+    if: needs.watcher.outputs.deploy == 'false'
     steps:
       - name: test it
         run: |
