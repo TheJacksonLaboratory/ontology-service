@@ -1,0 +1,50 @@
+name: Check for ontology release
+on:
+  workflow_dispatch:
+jobs:
+  watcher:
+    runs-on: ubuntu-latest
+    outputs:
+     sha: ${{ steps.sha.outputs.value }}
+     deploy: ${{ steps.compare.outputs.value }}
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_SA_KEY }}'
+
+      - name: Setup Google Cloud CLI
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Get latest tag_name
+        uses: sergeysova/jq-action@v2
+        id: tag
+        with:
+          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest | jq -r '.tag_name'"
+
+      - name: Get latest SHA
+        uses: sergeysova/jq-action@v2
+        id: sha
+        with:
+          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
+
+      - name:  Get existing SHA for service
+        id: existing
+        run:  |
+          EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')
+          echo "value=$EXISTING" >> $GITHUB_OUTPUT
+
+      - name: Compare and configure
+        id: compare
+        run: |
+          echo "value=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
+  trigger_deploy:
+    needs: watcher
+    if: needs.watcher.outputs.deploy == 'true'
+    uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
+    with:
+        ontology: hp
+        international: true
+        load: false
+        tag: "${{needs.watcher.outputs.sha}}"
+    secrets: inherit

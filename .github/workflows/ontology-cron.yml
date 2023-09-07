@@ -1,0 +1,5 @@
+name: Cron Supported Ontologies
+on:
+    schedule:
+        - cron: "*/10 * * * *"
+
