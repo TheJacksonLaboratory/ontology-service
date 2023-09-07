@@ -42,7 +42,7 @@ jobs:
           echo "deploy=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
   trigger_deploy:
     needs: watcher
-    if: ${{ needs.watcher.outputs.deploy == 'true' }}
+    if: needs.watcher.outputs.deploy == true
     uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
     with:
         ontology: hp
