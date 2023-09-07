@@ -1,5 +1,10 @@
 name: Check for ontology release
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+
+env:
+  SERVICE_TAG: ''
+  SHOULD_LOAD: false
 #  schedule:
 #    - cron: "*/10 * * * *"
 jobs:
@@ -34,5 +39,7 @@ jobs:
 
       - name: Compare and configure
         run: |
-          echo "${{steps.sha.outputs.value}}"
-          echo "${{steps.existing.outputs.value}}"
+          export SHOULD_LOAD=$("${{steps.sha.outputs.value}}" == "${{steps.existing.outputs.value}}"
+          export SERVICE_TAG="${{steps.sha.outputs.value}}"
+          echo $SHOULD_LOAD
+          echo $SERVICE_TAG
