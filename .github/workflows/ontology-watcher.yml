@@ -39,7 +39,7 @@ jobs:
 
       - name: Compare and configure
         run: |
-          export SHOULD_LOAD=$("${{steps.sha.outputs.value}}" == "${{steps.existing.outputs.value}}"
+          export SHOULD_LOAD=$("${{steps.sha.outputs.value}}" == "${{steps.existing.outputs.value}}")
           export SERVICE_TAG="${{steps.sha.outputs.value}}"
           echo $SHOULD_LOAD
           echo $SERVICE_TAG
