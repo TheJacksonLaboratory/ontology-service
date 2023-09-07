@@ -3,6 +3,8 @@ package org.jacksonlaboratory.model.entity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
 import org.monarchinitiative.phenol.ontology.data.Term;
@@ -48,6 +50,7 @@ public class OntologyTerm {
 
 	@Column(columnDefinition = "text")
 	@JsonView(Views.Term.class)
+
 	private String synonyms;
 
 	@JsonView(Views.Term.class)
@@ -81,22 +84,27 @@ public class OntologyTerm {
 		return uid;
 	}
 
+	@Schema(maxLength = 10, type = "string", pattern = ".*")
 	public String getId() {
 		return id.toString();
 	}
 
+	@Schema(maxLength = 255, type = "string", pattern = ".*")
 	public String getName() {
 		return name;
 	}
 
+	@Schema(maxLength = 1000, type = "string", pattern = ".*")
 	public String getDefinition() {
 		return definition;
 	}
 
+	@Schema(maxLength = 1000, type = "string", pattern = ".*")
 	public String getComment() {
 		return comment;
 	}
 
+	@ArraySchema(maxItems = 25)
 	public List<String> getSynonyms() {
 		if(this.synonyms.isBlank()){
 			return Collections.emptyList();
@@ -105,6 +113,7 @@ public class OntologyTerm {
 		}
 	}
 
+	@ArraySchema(maxItems = 25)
 	public List<String> getXrefs() {
 		if(xrefs.isBlank()){
 			return Collections.emptyList();
@@ -113,6 +122,7 @@ public class OntologyTerm {
 		}
 	}
 
+	@ArraySchema(maxItems = 25)
 	@Transient
 	@JsonGetter(value = "translations")
 	public List<Translation> getTranslations() {

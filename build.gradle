@@ -27,11 +27,11 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.214")
     implementation('org.apache.lucene:lucene-core:8.5.2')
     implementation('org.apache.lucene:lucene-queryparser:8.5.2')
-    implementation 'org.hibernate.search:hibernate-search-mapper-orm:6.1.8.Final'
+    implementation('org.hibernate.search:hibernate-search-mapper-orm:6.1.8.Final')
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut:micronaut-jackson-databind")
-    implementation("io.swagger.core.v3:swagger-annotations")
+    compileOnly("io.swagger.core.v3:swagger-annotations")
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut:micronaut-validation")
     implementation("org.monarchinitiative.phenol:phenol-core:2.0.2"){
