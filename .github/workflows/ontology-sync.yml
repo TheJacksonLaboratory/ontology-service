@@ -1,8 +1,6 @@
 name: Check for ontology release
 on:
   workflow_dispatch:
-#  schedule:
-#    - cron: "*/10 * * * *
 jobs:
   watcher:
     runs-on: ubuntu-latest
@@ -40,13 +38,21 @@ jobs:
         id: compare
         run: |
           echo "deploy=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
-  trigger_deploy:
+  basic:
     needs: watcher
-    if: needs.watcher.outputs.deploy == true
-    uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
-    with:
-        ontology: hp
-        international: true
-        load: false
-        tag: "${{needs.watcher.outputs.sha}}"
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test values
+        run: |
+          echo "${{needs.watcher.outputs.sha}}"
+          echo "${{needs.watcher.outputs.deploy}}"
+  # trigger_deploy:
+  #   needs: watcher
+  #   if: needs.watcher.outputs.deploy == true
+  #   uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
+  #   with:
+  #       ontology: hp
+  #       international: true
+  #       load: false
+  #       tag: "${{needs.watcher.outputs.sha}}"
+  #   secrets: inherit
