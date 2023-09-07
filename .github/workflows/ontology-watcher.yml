@@ -39,7 +39,5 @@ jobs:
 
       - name: Compare and configure
         run: |
-          export SHOULD_DEPLOY=${{steps.sha.outputs.value == steps.existing.outputs.value }}
+          export SHOULD_DEPLOY=${{steps.sha.outputs.value != steps.existing.outputs.value }}
           export SERVICE_TAG="${{steps.sha.outputs.value}}"
-          echo $SHOULD_DEPLOY
-          echo $SERVICE_TAG
