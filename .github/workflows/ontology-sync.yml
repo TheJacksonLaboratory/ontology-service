@@ -38,13 +38,21 @@ jobs:
         id: compare
         run: |
           echo "value=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
-  trigger_deploy:
+  test:
+    runs-on: ubuntu-latest
     needs: watcher
-    if: needs.watcher.outputs.deploy == true
-    uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
-    with:
-        ontology: hp
-        international: true
-        load: false
-        tag: "${{needs.watcher.outputs.sha}}"
-    secrets: inherit
+    steps:
+      - name: test it
+        run: |
+          echo "${{needs.watcher.outputs.sha}}"
+          echo "${{needs.watcher.outputs.deploy}}"
+  # trigger_deploy:
+  #   needs: watcher
+  #   if: needs.watcher.outputs.deploy == true
+  #   uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
+  #   with:
+  #       ontology: hp
+  #       international: true
+  #       load: false
+  #       tag: "${{needs.watcher.outputs.sha}}"
+  #   secrets: inherit
