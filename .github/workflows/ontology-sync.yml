@@ -6,10 +6,13 @@ env:
   SERVICE_TAG: ''
   SHOULD_DEPLOY: false
 #  schedule:
-#    - cron: "*/10 * * * *"
+#    - cron: "*/10 * * * *
 jobs:
   watcher:
     runs-on: ubuntu-latest
+    outputs:
+     sha: ${{ steps.sha.outputs.value }}
+     deploy: ${{ steps.compare.outputs.value }}
     steps:
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -38,6 +41,17 @@ jobs:
           echo "value=$EXISTING" >> $GITHUB_OUTPUT
 
       - name: Compare and configure
+        id: compare
         run: |
-          export SHOULD_DEPLOY=${{steps.sha.outputs.value != steps.existing.outputs.value }}
-          export SERVICE_TAG="${{steps.sha.outputs.value}}"
+          echo "deploy="${{steps.sha.outputs.value != steps.existing.outputs.value }}"" >> "$GITHUB_OUTPUT"
+          echo "sha="${{steps.sha.outputs.value}}"" >> "$GITHUB_OUTPUT"
+  trigger_deploy:
+    needs: watcher
+    if: ${{ needs.watcher.outputs.deploy == 'true' }}
+    uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
+    with:
+        ontology: hp
+        international: true
+        load: false
+        tag: "${{needs.watcher.outputs.sha}}"
+    secrets: inherit

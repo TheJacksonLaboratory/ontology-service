@@ -1,6 +1,6 @@
 name: Google Cloud Run Java CD
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       ontology:
         description: 'The ontology to use.'
@@ -14,55 +14,23 @@ on:
         description: 'Should load the data?'
         default: true
         type: boolean
+      tag:
+        description: 'The data tag'
+        type: string
 env:
-  GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-  GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
-  GCLOUD_REGION: us-east1
-  GCLOUD_GCR: us-east1-docker.pkg.dev
-  ONTOLOGY: ${{ inputs.ontology }}
-  ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
-  ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
-  SERVICE_NAME: ontology-service-${{ inputs.ontology }}
-  SERVICE_TAG: ''
-  SHOULD_DEPLOY: false
+    GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+    GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+    GCLOUD_REGION: us-east1
+    GCLOUD_GCR: us-east1-docker.pkg.dev
+    ONTOLOGY: ${{ inputs.ontology }}
+    ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
+    ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
+    SERVICE_NAME: ontology-service-${{ inputs.ontology }}
+    SERVICE_TAG: ${{ inputs.tag }}
 
 
 jobs:
-  watcher:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.GCLOUD_SA_KEY }}'
-
-      - name: Setup Google Cloud CLI
-        uses: 'google-github-actions/setup-gcloud@v1'
-
-      - name: Get latest tag_name
-        uses: sergeysova/jq-action@v2
-        id: tag
-        with:
-          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest | jq -r '.tag_name'"
-
-      - name: Get latest SHA
-        uses: sergeysova/jq-action@v2
-        id: sha
-        with:
-          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
-
-      - name:  Get existing SHA for service
-        id: existing
-        run:  |
-          EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-hp | head -n 2 | tail -n 1 | awk '{print $2}')
-          echo "value=$EXISTING" >> $GITHUB_OUTPUT
-
-      - name: Compare and configure
-        run: |
-          echo "SHOULD_DEPLOY=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> $GITHUB_ENV
-          echo "SERVICE_TAG="${{steps.sha.outputs.value}}"" >> $GITHUB_ENV
   build:
-    if: ${{ env.SHOULD_DEPLOY == true }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
