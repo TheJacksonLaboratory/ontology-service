@@ -40,7 +40,6 @@ jobs:
         id: compare
         run: |
           echo "deploy=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
-          echo "sha=${{steps.sha.outputs.value}}" >> "$GITHUB_OUTPUT"
   trigger_deploy:
     needs: watcher
     if: ${{ needs.watcher.outputs.deploy == 'true' }}
