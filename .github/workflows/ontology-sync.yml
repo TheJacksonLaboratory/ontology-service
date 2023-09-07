@@ -1,10 +1,6 @@
 name: Check for ontology release
 on:
   workflow_dispatch:
-
-env:
-  SERVICE_TAG: ''
-  SHOULD_DEPLOY: false
 #  schedule:
 #    - cron: "*/10 * * * *
 jobs:
@@ -43,8 +39,8 @@ jobs:
       - name: Compare and configure
         id: compare
         run: |
-          echo "deploy="${{steps.sha.outputs.value != steps.existing.outputs.value }}"" >> "$GITHUB_OUTPUT"
-          echo "sha="${{steps.sha.outputs.value}}"" >> "$GITHUB_OUTPUT"
+          echo "deploy=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
+          echo "sha=${{steps.sha.outputs.value}}" >> "$GITHUB_OUTPUT"
   trigger_deploy:
     needs: watcher
     if: ${{ needs.watcher.outputs.deploy == 'true' }}
