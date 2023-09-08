@@ -58,7 +58,7 @@ jobs:
   trigger_deploy:
     needs: watcher
     if: needs.watcher.outputs.deploy == 'true'
-    uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-build-deploy.yml@feature/watcher
+    uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-build-deploy.yml@main
     with:
         ontology: ${{ inputs.ontology }}
         international: ${{ inputs.international }}
