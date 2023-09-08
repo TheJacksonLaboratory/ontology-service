@@ -1,6 +1,23 @@
-name: Check for ontology release
+name: Check Ontology Release & Trigger Build-Deploy
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ontology:
+        description: 'The ontology to use.'
+        required: true
+        type: string
+      international:
+        description: 'Is the ontology babelon international?'
+        default: false
+        type: boolean
+      load:
+        description: 'Should load the data?'
+        default: true
+        type: boolean
+      repo:
+        description: 'The full API url for repo'
+        required: true
+        type: string
 jobs:
   watcher:
     runs-on: ubuntu-latest
@@ -20,13 +37,13 @@ jobs:
         uses: sergeysova/jq-action@v2
         id: tag
         with:
-          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest | jq -r '.tag_name'"
+          cmd: "curl ${{ inputs.repo }}/releases/latest | jq -r '.tag_name'"
 
       - name: Get latest SHA
         uses: sergeysova/jq-action@v2
         id: sha
         with:
-          cmd: "curl https://api.github.com/repos/obophenotype/human-phenotype-ontology/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
+          cmd: "curl ${{ inputs.repo }}/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
 
       - name:  Get existing SHA for service
         id: existing
@@ -41,10 +58,10 @@ jobs:
   trigger_deploy:
     needs: watcher
     if: needs.watcher.outputs.deploy == 'true'
-    uses: TheJacksonLaboratory/ontology-service/.github/workflows/google-cloud-run.yml@feature/watcher
+    uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-build-deploy.yml@feature/watcher
     with:
-        ontology: hp
-        international: true
-        load: false
+        ontology: ${{ inputs.ontology }}
+        international: ${{ inputs.international }}
+        load: ${{ inputs.load }}
         tag: "${{needs.watcher.outputs.sha}}"
     secrets: inherit
