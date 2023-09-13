@@ -1,5 +1,5 @@
 package org.jacksonlaboratory.model;
 
 public enum Language {
-	EN, NL, FR, TR, NNA, CS, ZH, TW, DTP
+	EN, NL, FR, TR, NNA, CS, ZH, TW, DTP, JA, ES
 }

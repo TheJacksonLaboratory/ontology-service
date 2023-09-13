@@ -4,8 +4,6 @@ import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.info.*;
 
-import java.sql.SQLException;
-
 @OpenAPIDefinition(
     info = @Info(
             title = "ontology-service-${ontology}",

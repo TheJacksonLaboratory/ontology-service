@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.Language;
 import org.jacksonlaboratory.model.TranslationStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -74,10 +75,12 @@ public class Translation {
 		return language;
 	}
 
+	@Schema(maxLength = 255, type = "string", pattern = ".*")
 	public String getName() {
 		return name;
 	}
 
+	@Schema(maxLength = 1000, type = "string", pattern = ".*")
 	public String getDefinition() {
 		return definition;
 	}
