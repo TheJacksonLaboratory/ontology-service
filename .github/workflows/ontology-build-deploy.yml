@@ -1,22 +1,22 @@
 name: Build Ontology Service & Deploy Cloud Run
 on:
   workflow_dispatch:
-  inputs:
-      ontology:
-        description: 'The ontology to use.'
-        required: true
-        type: string
-      international:
-        description: 'Is the ontology babelon international?'
-        default: false
-        type: boolean
-      load:
-        description: 'Should load the data?'
-        default: true
-        type: boolean
-      tag:
-        description: 'The data tag'
-        type: string
+    inputs:
+        ontology:
+          description: 'The ontology to use.'
+          required: true
+          type: string
+        international:
+          description: 'Is the ontology babelon international?'
+          default: false
+          type: boolean
+        load:
+          description: 'Should load the data?'
+          default: true
+          type: boolean
+        tag:
+          description: 'The data tag'
+          type: string
   workflow_call:
     inputs:
       ontology:
