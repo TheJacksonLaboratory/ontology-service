@@ -1,0 +1,20 @@
+name: Cron Ontology Service
+on:
+    schedule:
+        - cron: "*/30 * * * *"
+jobs:
+    ontologies:
+        strategy:
+            matrix:
+                include:
+                    - ontology: "hp"
+                      international: true
+                      repo: "https://api.github.com/repos/obophenotype/human-phenotype-ontology"
+
+        uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
+        with:
+            ontology: ${{ matrix.ontology }}
+            international: ${{ matrix.international }}
+            load: true
+            repo: ${{ matrix.repo }}
+        secrets: inherit

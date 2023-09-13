@@ -10,6 +10,7 @@ import java.sql.SQLException;
     info = @Info(
             title = "ontology-service-${ontology}",
             description = "A restful service for the ${ontology} ontology.",
+            version = "0.0.1",
             contact = @Contact(name = "Michael Gargano", email = "Michael.Gargano@jax.org")
     )
 )

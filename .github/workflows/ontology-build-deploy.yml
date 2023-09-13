@@ -1,6 +1,6 @@
-name: Google Cloud Run Java CD
+name: Build Ontology Service & Deploy Cloud Run
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       ontology:
         description: 'The ontology to use.'
@@ -14,15 +14,19 @@ on:
         description: 'Should load the data?'
         default: true
         type: boolean
+      tag:
+        description: 'The data tag'
+        type: string
 env:
-  GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-  GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
-  GCLOUD_REGION: us-east1
-  GCLOUD_GCR: us-east1-docker.pkg.dev
-  ONTOLOGY: ${{ inputs.ontology }}
-  ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
-  ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
-  SERVICE_NAME: ontology-service-${{ inputs.ontology }}
+    GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+    GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+    GCLOUD_REGION: us-east1
+    GCLOUD_GCR: us-east1-docker.pkg.dev
+    ONTOLOGY: ${{ inputs.ontology }}
+    ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
+    ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
+    SERVICE_NAME: ontology-service-${{ inputs.ontology }}
+    SERVICE_TAG: ${{ inputs.tag }}
 
 
 jobs:
@@ -63,7 +67,7 @@ jobs:
           GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed -e 's#//#/#' -e 's#^/##'`
+          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" | sed -e 's#//#/#' -e 's#^/##'`
           echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed 's/./& /g'
           ./gradlew check dockerPush --no-daemon
       - name: Deploy Cloud Run

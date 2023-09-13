@@ -5,7 +5,7 @@ plugins {
     id("io.micronaut.test-resources") version "3.7.9"
 }
 
-version = "0.1"
+version = "0.0.1"
 group = "org.jacksonlaboratory"
 
 repositories {
@@ -74,11 +74,11 @@ tasks {
     }
 
     dockerBuild {
-        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+        images = ["${System.env.DOCKER_IMAGE ?: "${project.name}:${project.version}"}"]
     }
 
     dockerBuildNative {
-        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+        images = ["${System.env.DOCKER_IMAGE ?: "${project.name}:${project.version}"}"]
     }
 }
 
