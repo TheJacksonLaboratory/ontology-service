@@ -1,5 +1,23 @@
 name: Check Ontology Release & Trigger Build-Deploy
 on:
+  workflow_dispatch:
+   inputs:
+      ontology:
+        description: 'The ontology to use.'
+        required: true
+        type: string
+      international:
+        description: 'Is the ontology babelon international?'
+        default: false
+        type: boolean
+      load:
+        description: 'Should load the data?'
+        default: true
+        type: boolean
+      repo:
+        description: 'The full API url for repo'
+        required: true
+        type: string
   workflow_call:
     inputs:
       ontology:
