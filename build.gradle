@@ -69,11 +69,11 @@ tasks.register('prepareData') {
 
 tasks {
     dockerfile {
-        baseImage("openjdk:11-jre-slim-buster")
+        baseImage("openjdk:17-jre-slim-buster")
         copyFile("data/", "data/")
-        environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}",
-                             'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}",
-                             'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}"] )
+        environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}".toString(),
+                             'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}".toString(),
+                             'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}".toString()] )
         entryPoint("java", "-Xmx6g", "-Xms1024m", "-jar", "/home/app/application.jar")
     }
 
