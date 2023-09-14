@@ -8,6 +8,7 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
+import org.jacksonlaboratory.model.dto.SimpleOntologyTerm
 import org.jacksonlaboratory.model.entity.OntologyTerm
 import org.jacksonlaboratory.service.GraphService
 import org.jacksonlaboratory.service.TermService
@@ -64,7 +65,7 @@ class TermControllerSpec extends Specification {
         response.status().getCode().toInteger() == 200
         where:
         q | res
-        "HP:000003"  |[new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment"), new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1")]
+        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1"))]
     }
 
     void "should return parents"() {
@@ -76,7 +77,7 @@ class TermControllerSpec extends Specification {
         response.status().getCode().toInteger() == 200
         where:
         q | res
-        "HP:000003"  |[new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment"), new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1")]
+        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1"))]
     }
 
 

@@ -14,23 +14,9 @@ class OntologyTermSpec extends Specification {
         expect:
         JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.DEFAULT_VIEW_INCLUSION).build()
         String result = mapper
-                .writerWithView(Views.GraphOnly.class)
-                .writeValueAsString(term);
-
-        result.contains("my name")
-        !result.contains("def")
-    }
-
-    void 'test user view works'() {
-        given:
-        def term = new OntologyTerm(TermId.of("HP:000001"), 'my name', 'def', '')
-        expect:
-        JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.DEFAULT_VIEW_INCLUSION).build()
-        String result = mapper
                 .writeValueAsString(term);
 
         result.contains("my name")
         result.contains("def")
     }
-
 }

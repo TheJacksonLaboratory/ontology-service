@@ -1,8 +1,6 @@
 micronaut:
   application:
     name: ontology-service-${ONTOLOGY:unknown}
-    cors:
-      enabled: true
   router:
     static-resources:
       swagger:
