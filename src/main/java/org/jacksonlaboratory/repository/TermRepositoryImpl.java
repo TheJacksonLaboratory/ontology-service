@@ -2,19 +2,20 @@ package org.jacksonlaboratory.repository;
 
 import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Singleton
 public class TermRepositoryImpl implements TermRepository {
+
 	private final EntityManager entityManager;
 
 	public TermRepositoryImpl(EntityManager entityManager) {
@@ -24,15 +25,15 @@ public class TermRepositoryImpl implements TermRepository {
 	@Override
 	@ReadOnly
 	public Optional<List<OntologyTerm>> findAll(){
-		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t", OntologyTerm.class).getResultList();
+		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t", OntologyTerm.class).getResultStream().collect(Collectors.toList());
 		return Optional.of(terms);
 	}
 
 	@Override
 	@ReadOnly
 	public Optional<OntologyTerm> findByTermId(TermId id) {
-		OntologyTerm term = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id = :param1", OntologyTerm.class).setParameter("param1", id).getSingleResult();
-		return Optional.ofNullable(term);
+		Optional<OntologyTerm> term = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id = :param1", OntologyTerm.class).setParameter("param1", id).getResultStream().findFirst();
+		return term;
 	}
 
 	@Override
@@ -52,14 +53,7 @@ public class TermRepositoryImpl implements TermRepository {
 	public List<OntologyTerm> search(String searchTerm) {
 		TypedQuery<OntologyTerm> sp = entityManager.createNamedQuery("searchQuery", OntologyTerm.class);
 		sp.setParameter("param1", String.format("%s*", searchTerm));
-		return sp.getResultList();
-	}
-
-	@Override
-	@Transactional
-	public OntologyTerm save(OntologyTerm term) {
-		entityManager.persist(term);
-		return term;
+		return sp.getResultStream().collect(Collectors.toList());
 	}
 
 	@Override

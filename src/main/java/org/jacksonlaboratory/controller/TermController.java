@@ -1,11 +1,12 @@
 package org.jacksonlaboratory.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.jacksonlaboratory.model.dto.SimpleOntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.service.GraphService;
 import org.jacksonlaboratory.service.TermService;
-import org.jacksonlaboratory.view.Views;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class TermController {
      * Get all terms
      * @return List of all ontology terms
      */
-    @JsonView(Views.Term.class)
     @Get(uri="/", produces="application/json")
     public List<OntologyTerm> all() {
         return this.termService.getAllOntologyTerms();
@@ -37,11 +37,11 @@ public class TermController {
      * @param id The ontology term id
      * @return The term or null.
      */
-    @JsonView(Views.Term.class)
     @Get(uri="/{id}", produces="application/json")
-    public OntologyTerm details(@PathVariable TermId id) {
-        Optional<OntologyTerm> term = this.termService.getOntologyTermByTermId(id);
-        return term.orElse(null);
+    public HttpResponse<?> details(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id) {
+        TermId termId = TermId.of(id);
+        Optional<OntologyTerm> term = this.termService.getOntologyTermByTermId(termId);
+        return HttpResponse.ok(term.orElse(null));
     }
 
     /**
@@ -49,10 +49,10 @@ public class TermController {
      * @param id The ontology term id
      * @return The parents of the term id
      */
-    @JsonView(Views.GraphOnly.class)
     @Get(uri="/{id}/parents", produces="application/json")
-    public List<OntologyTerm> ancestors(@PathVariable TermId id){
-        return this.graphService.getParents(id);
+    public List<SimpleOntologyTerm> parents(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id){
+        TermId termId = TermId.of(id);
+        return this.graphService.getParents(termId);
     }
 
     /**
@@ -60,10 +60,10 @@ public class TermController {
      * @param id The ontology term id
      * @return The children of the term id
      */
-    @JsonView(Views.GraphOnly.class)
     @Get(uri="/{id}/children", produces="application/json")
-    public List<OntologyTerm> children(@PathVariable TermId id){
-        return this.graphService.getChildren(id);
+    public List<SimpleOntologyTerm> children(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id){
+        TermId termId = TermId.of(id);
+        return this.graphService.getChildren(termId);
     }
 
 }

@@ -1,9 +1,10 @@
 package org.jacksonlaboratory.model.converter;
 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+
 
 @Converter
 public class TermIdAttributeConverter implements AttributeConverter<TermId, String> {

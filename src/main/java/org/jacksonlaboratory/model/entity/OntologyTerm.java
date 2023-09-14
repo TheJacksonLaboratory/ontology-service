@@ -2,9 +2,11 @@ package org.jacksonlaboratory.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
+import jakarta.persistence.*;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
 import org.monarchinitiative.phenol.ontology.data.Term;
@@ -12,7 +14,6 @@ import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.ontology.data.TermSynonym;
 import org.jacksonlaboratory.view.Views;
 
-import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,48 +21,38 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Entity
 @NamedNativeQuery(
 		name="searchQuery",
 		query = "SELECT ONTOLOGY_TERM.* FROM FTL_SEARCH_DATA(:param1, 0, 0) AS FT LEFT JOIN ONTOLOGY_TERM ON ONTOLOGY_TERM.uid = FT.KEYS[1];",
 		resultClass = OntologyTerm.class)
 @Serdeable
+@Entity
 public class OntologyTerm {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView(Views.Term.class)
 	private Long uid;
 
-	@JsonView(Views.GraphOnly.class)
 	@Column(columnDefinition = "varchar")
 	@Convert(converter = TermIdAttributeConverter.class)
 	private TermId id;
 
-	@JsonView(Views.GraphOnly.class)
 	private String name;
 
 	@Column(columnDefinition = "text")
-	@JsonView(Views.Term.class)
 	private String definition;
 	@Column(columnDefinition = "text")
-	@JsonView(Views.Term.class)
 	private String comment;
 
 	@Column(columnDefinition = "text")
-	@JsonView(Views.Term.class)
-
 	private String synonyms;
 
-	@JsonView(Views.Term.class)
 	private String xrefs;
 
 	@Transient
 	private List<Translation> translations;
 
-	public OntologyTerm() {
-
-	}
+	@Creator
 	public OntologyTerm(TermId id, String name, String definition, String comment) {
 		this.id = id;
 		this.name = name;
@@ -78,6 +69,10 @@ public class OntologyTerm {
 		this.comment = term.getComment();
 		this.synonyms = term.getSynonyms().stream().filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(";"));
 		this.xrefs = term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(";"));
+	}
+
+	public OntologyTerm() {
+
 	}
 
 	public Long uid() {

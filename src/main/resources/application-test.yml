@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: ontology-service-${ONTOLOGY:unknown}
+    cors:
+      enabled: true
   router:
     static-resources:
       swagger:
@@ -9,6 +11,9 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /${api-url.prefix}/${ontology}/docs/**
+  serde:
+    serialization:
+      inclusion: ALWAYS
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
@@ -16,8 +21,6 @@ datasources:
     username: sa
     password: ''
     dialect: MYSQL
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    db-type: mysql
 jpa:
   default:
     entity-scan:
@@ -36,10 +39,8 @@ netty:
     allocator:
       max-order: 3
 jackson:
-  json-view:
-    enabled: true
-  mapper:
-    defaultViewInclusion: false
+  serializationInclusion: ALWAYS
+
 api-url:
   prefix: /api
 ontology: ${ONTOLOGY}
