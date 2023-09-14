@@ -69,7 +69,7 @@ tasks.register('prepareData') {
 
 tasks {
     dockerfile {
-        baseImage("openjdk:17-jdk-slim")
+        baseImage("openjdk:17-ea-slim-buster")
         copyFile("data/", "data/")
         environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}".toString(),
                              'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}".toString(),
