@@ -43,24 +43,32 @@ public class GraphService {
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
-		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
-		if (international){
-			for (OntologyTerm term: termList) {
-				 term.setTranslation(this.translationRepository.findAllByTerm(term));
+		if (termIdList.size() == 0){
+			return Collections.emptyList();
+		} else {
+			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+			if (international){
+				for (OntologyTerm term: termList) {
+					term.setTranslation(this.translationRepository.findAllByTerm(term));
+				}
 			}
+			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 		}
-		return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 	}
 
 	public List<SimpleOntologyTerm> getChildren(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
-		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
-		if (international){
-			for (OntologyTerm term: termList) {
-				term.setTranslation(this.translationRepository.findAllByTerm(term));
+		if (termIdList.size() == 0){
+			return Collections.emptyList();
+		} else {
+			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+			if (international){
+				for (OntologyTerm term: termList) {
+					term.setTranslation(this.translationRepository.findAllByTerm(term));
+				}
 			}
+			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 		}
-		return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 	}
 
 	public MinimalOntology getOntology() {
