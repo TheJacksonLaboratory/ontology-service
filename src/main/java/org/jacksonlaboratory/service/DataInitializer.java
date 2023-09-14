@@ -1,7 +1,7 @@
 package org.jacksonlaboratory.service;
 
 import io.micronaut.context.annotation.Value;
-import io.micronaut.context.event.ApplicationEventListener;
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.ingest.BabelonIngestor;
 import org.jacksonlaboratory.ingest.BabelonLine;
@@ -15,8 +15,6 @@ import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;

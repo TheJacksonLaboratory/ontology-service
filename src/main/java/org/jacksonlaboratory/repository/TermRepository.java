@@ -1,24 +1,25 @@
 package org.jacksonlaboratory.repository;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
-import javax.validation.constraints.NotBlank;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface TermRepository {
 
 	Optional<List<OntologyTerm>> findAll();
-	Optional<OntologyTerm> findByTermId(@NotBlank TermId id);
+	Optional<OntologyTerm> findByTermId(@NotNull TermId id);
 
-	Optional<List<OntologyTerm>> findByTermIdIn(@NotBlank List<TermId> ids);
+	Optional<List<OntologyTerm>> findByTermIdIn(@NotEmpty List<TermId> ids);
 
 	List<OntologyTerm> search(@NotBlank String query);
 
-	OntologyTerm save(@NotBlank OntologyTerm term);
-
-	void saveAll(@NotBlank List<OntologyTerm> terms);
+	void saveAll(@NotEmpty List<OntologyTerm> terms);
 
 	void configure();
 }

@@ -1,8 +1,8 @@
 plugins {
     id("groovy") 
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.7.9"
-    id("io.micronaut.test-resources") version "3.7.9"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.1.0"
+    id("io.micronaut.test-resources") version "4.1.0"
 }
 
 version = "0.5.0"
@@ -13,15 +13,17 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor("io.micronaut:micronaut-inject-java")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:1.5.2")
-    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("jakarta.annotation:jakarta.annotation-api")
-    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
+    implementation("jakarta.persistence:jakarta.persistence-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.flywaydb:flyway-mysql")
     runtimeOnly("com.h2database:h2:2.1.214")
@@ -33,7 +35,7 @@ dependencies {
     implementation("io.micronaut:micronaut-jackson-databind")
     compileOnly("io.swagger.core.v3:swagger-annotations")
     implementation("io.micronaut.flyway:micronaut-flyway")
-    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.validation:micronaut-validation:4.0.3")
     implementation("org.monarchinitiative.phenol:phenol-core:2.0.2"){
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
@@ -52,8 +54,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("11")
-    targetCompatibility = JavaVersion.toVersion("11")
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
 }
 
 tasks.register('prepareData') {

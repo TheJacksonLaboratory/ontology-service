@@ -1,16 +1,17 @@
 package org.jacksonlaboratory.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.persistence.*;
 import org.jacksonlaboratory.model.Language;
 import org.jacksonlaboratory.model.TranslationStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
 @Serdeable
+@Entity
 public class Translation {
 
 	@Id
@@ -27,13 +28,10 @@ public class Translation {
 	private String name;
 
 	@Column(columnDefinition = "text")
+	@JsonIgnore
 	private String definition;
 
 	private TranslationStatus status;
-
-	public Translation() {
-
-	}
 
 	public Translation(OntologyTerm term, Language language, String name, String definition, TranslationStatus status) {
 		this.term = term;
@@ -41,6 +39,10 @@ public class Translation {
 		this.name = name;
 		this.definition = definition;
 		this.status = status;
+	}
+
+	public Translation() {
+
 	}
 
 	public Long getId() {

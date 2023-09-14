@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
+import org.jacksonlaboratory.model.dto.SimpleOntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
@@ -13,7 +14,7 @@ import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.Collections;
@@ -40,7 +41,7 @@ public class GraphService {
 		this.translationRepository = translationRepository;
 	}
 
-	public List<OntologyTerm> getParents(TermId termId) {
+	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
 		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
 		if (international){
@@ -48,10 +49,10 @@ public class GraphService {
 				 term.setTranslation(this.translationRepository.findAllByTerm(term));
 			}
 		}
-		return termList;
+		return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 	}
 
-	public List<OntologyTerm> getChildren(TermId termId) {
+	public List<SimpleOntologyTerm> getChildren(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
 		List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
 		if (international){
@@ -59,12 +60,7 @@ public class GraphService {
 				term.setTranslation(this.translationRepository.findAllByTerm(term));
 			}
 		}
-		return termList;
-	}
-
-	public List<OntologyTerm> getAncestors(TermId termId) {
-		List<TermId> termIdList = this.ontology.graph().getAncestorsStream(termId, false).collect(Collectors.toList());
-		return this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+		return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 	}
 
 	public MinimalOntology getOntology() {
