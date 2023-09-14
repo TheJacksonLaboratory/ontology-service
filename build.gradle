@@ -46,6 +46,8 @@ dependencies {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
 
+    testImplementation("io.micronaut:micronaut-inject-groovy")
+    testImplementation('org.objenesis:objenesis:3.3')
 }
 
 
@@ -89,7 +91,7 @@ dockerfile.dependsOn('prepareData')
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
-    testRuntime("spock2")
+    testRuntime("spock")
     processing {
         incremental(true)
         annotations("org.jacksonlaboratory.*")

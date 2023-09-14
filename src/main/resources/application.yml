@@ -23,8 +23,6 @@ datasources:
     username: sa
     password: ''
     dialect: MYSQL
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    db-type: mysql
 jpa:
   default:
     entity-scan:
