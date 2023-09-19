@@ -1,0 +1,34 @@
+name: Sanity Check Application
+on: pull_request
+env:
+  ONTOLOGY: hp
+  ONTOLOGY_SERVICE_LOAD: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.m2/repository
+          key: ${{ runner.os }}-gradle-test-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-test-
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Setup Google Cloud CLI
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Get ontology data
+        run: |
+          bash ontology.sh hp
+      - name: Run the tests
+        run: |
+          ./gradlew test
+
