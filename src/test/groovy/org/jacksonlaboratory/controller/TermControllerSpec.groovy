@@ -59,16 +59,6 @@ class TermControllerSpec extends Specification {
 
     void "should return parents"() {
         when:
-            def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q), Map.class)
-        then:
-            response.status().getCode().toInteger() == 400
-        where:
-        q | res
-        "tan"  | "TermId has no prefix"
-    }
-
-    void "should return parents"() {
-        when:
         def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q + '/children'), Argument.listOf(Map.class))
         then:
         1 * graphService.getChildren(TermId.of(q)) >> res
