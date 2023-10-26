@@ -5,6 +5,7 @@ import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -58,18 +59,6 @@ class TermControllerSpec extends Specification {
 
     void "should return parents"() {
         when:
-        def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q + '/parents'), Argument.listOf(Map.class))
-        then:
-        1 * graphService.getParents(TermId.of(q)) >> res
-        response.body().size() == res.size()
-        response.status().getCode().toInteger() == 200
-        where:
-        q | res
-        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1"))]
-    }
-
-    void "should return parents"() {
-        when:
         def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q + '/children'), Argument.listOf(Map.class))
         then:
         1 * graphService.getChildren(TermId.of(q)) >> res
@@ -78,6 +67,17 @@ class TermControllerSpec extends Specification {
         where:
         q | res
         "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1"))]
+    }
+
+    void "should return bad request"(){
+        when:
+            def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q), Argument.listOf(Map.class))
+        then:
+            def e = thrown(HttpClientResponseException)
+            e.status.getCode() == 400
+        where:
+        q | res
+        "diseases"  | "Is not a valid term"
     }
 
 

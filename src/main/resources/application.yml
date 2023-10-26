@@ -15,6 +15,9 @@ micronaut:
   serde:
     serialization:
       inclusion: ALWAYS
+endpoints:
+  all:
+    path: /${api-url.prefix}/${ontology}/
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
