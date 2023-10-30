@@ -91,7 +91,7 @@ jobs:
           ./gradlew check dockerPush --no-daemon
 
       - name: Tag Artifact Registry
-        run:
+        run: |
           gcloud artifacts docker tags add ${DOCKER_IMAGE} "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
           gcloud artifacts docker tags add ${DOCKER_IMAGE} "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
       - name: Deploy Cloud Run
