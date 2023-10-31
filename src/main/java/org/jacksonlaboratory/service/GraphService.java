@@ -78,8 +78,8 @@ public class GraphService {
 	@PostConstruct
 	public void initialize() {
 		log.info("Loading ontology json..");
-		File file = new File(String.format("data/%s-simple-non-classified.json", ontologyName));
-		this.ontology = OntologyLoader.loadOntology(file);
+		File file = new File(String.format("data/%s-base.json", ontologyName));
+		this.ontology = OntologyLoader.loadOntology(file, ontologyName.toUpperCase());
 		log.info("Finished loading ontology json..");
 	}
 }

@@ -46,7 +46,7 @@ public class OntologyTerm {
 
 	@Column(columnDefinition = "text")
 	private String synonyms;
-
+	@Column(columnDefinition = "text")
 	private String xrefs;
 
 	@Transient
