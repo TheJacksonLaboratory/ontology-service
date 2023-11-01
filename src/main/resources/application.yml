@@ -8,7 +8,7 @@ micronaut:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
-        mapping: /swagger/**
+        mapping: /${api-url.prefix}/${ontology}/**
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /${api-url.prefix}/${ontology}/docs/**
