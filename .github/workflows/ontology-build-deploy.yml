@@ -37,6 +37,7 @@ on:
 env:
     GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
     GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+    GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
     GCLOUD_REGION: us-east1
     GCLOUD_GCR: us-east1-docker.pkg.dev
     ONTOLOGY: ${{ inputs.ontology }}
@@ -92,9 +93,8 @@ jobs:
 
       - name: Tag Artifact Registry
         run: |
-          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME"
           gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
-          gcloud artifacts docker tags add "$GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_NAME" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
+          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_NAME" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
       - name: Deploy Cloud Run
         run: |
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
