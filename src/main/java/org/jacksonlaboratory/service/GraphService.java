@@ -8,6 +8,7 @@ import org.jacksonlaboratory.model.dto.SimpleOntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
+import org.monarchinitiative.phenol.io.MinimalOntologyLoader;
 import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.MinimalOntology;
 import org.monarchinitiative.phenol.ontology.data.TermId;
@@ -79,7 +80,7 @@ public class GraphService {
 	public void initialize() {
 		log.info("Loading ontology json..");
 		File file = new File(String.format("data/%s-base.json", ontologyName));
-		this.ontology = OntologyLoader.loadOntology(file, ontologyName.toUpperCase());
+		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());
 		log.info("Finished loading ontology json..");
 	}
 }

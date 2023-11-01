@@ -87,13 +87,14 @@ jobs:
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" | sed -e 's#//#/#' -e 's#^/##'`
-          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed 's/./& /g'
+          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME"
           ./gradlew check dockerPush --no-daemon
 
       - name: Tag Artifact Registry
         run: |
+          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME"
           gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
-          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
+          gcloud artifacts docker tags add "$GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_NAME" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
       - name: Deploy Cloud Run
         run: |
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
