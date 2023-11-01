@@ -100,7 +100,7 @@ micronaut {
 
 tasks.withType(JavaCompile) {
     options.fork = true
-    options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY}/docs/".toString()
+    options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY}/docs/,swagger-ui.spec.url=/api/${System.env.ONTOLOGY}/${project.name}-${System.env.ONTOLOGY}-${project.version}.yml".toString()
 }
 
 

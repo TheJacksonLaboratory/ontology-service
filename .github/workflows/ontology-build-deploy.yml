@@ -37,6 +37,7 @@ on:
 env:
     GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
     GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+    GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
     GCLOUD_REGION: us-east1
     GCLOUD_GCR: us-east1-docker.pkg.dev
     ONTOLOGY: ${{ inputs.ontology }}
@@ -77,7 +78,7 @@ jobs:
           echo "PROJECT_VERSION=$(./gradlew properties -q | awk '/^version:/ {print $2}')" >> $GITHUB_ENV
       - name: Get ontology data
         run: |
-          bash ontology.sh hp
+          bash ontology.sh ${ONTOLOGY}
       - name: Docker Login
         run: |
           gcloud auth configure-docker us-east1-docker.pkg.dev
@@ -87,13 +88,13 @@ jobs:
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" | sed -e 's#//#/#' -e 's#^/##'`
-          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME" | sed 's/./& /g'
+          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME"
           ./gradlew check dockerPush --no-daemon
 
       - name: Tag Artifact Registry
         run: |
-          gcloud artifacts docker tags add ${DOCKER_IMAGE} "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
-          gcloud artifacts docker tags add ${DOCKER_IMAGE} "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
+          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
+          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
       - name: Deploy Cloud Run
         run: |
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
