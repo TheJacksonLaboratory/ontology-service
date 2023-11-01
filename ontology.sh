@@ -7,10 +7,10 @@ then
 elif [ $1 == "mp" ]
 then
   wget -P data/ --no-use-server-timestamps https://purl.obolibrary.org/obo/mp/mp-base.json
-elif [ $1 == "mondo"]
+elif [ $1 == "mondo" ]
 then
   wget -P data/ --no-use-server-timestamps https://purl.obolibrary.org/obo/mondo/mondo-base.json
-elif [ $1 == "maxo"]
+elif [ $1 == "maxo" ]
 then
  wget -P data/ --no-use-server-timestamps https://purl.obolibrary.org/obo/maxo/maxo-base.json
 fi
