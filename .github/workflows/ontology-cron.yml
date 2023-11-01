@@ -13,6 +13,9 @@ jobs:
                     - ontology: "mondo"
                       international: false
                       repo: "https://api.github.com/repos/monarch-initiative/mondo"
+                    - ontology: "maxo"
+                      international: false
+                      repo: "https://api.github.com/repos/monarch-initiative/maxo"
 
         uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
         with:
