@@ -48,7 +48,7 @@ jobs:
       - name:  Get existing SHA for service
         id: existing
         run:  |
-          EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-mondo | head -n 2 | tail -n 1 | awk '{print $2}' | tr ',' '\n' | grep -v "latest" | grep -v "\.")
+          EXISTING=$(gcloud container images list-tags us-east1-docker.pkg.dev/jax-robinson-hpo-01/docker-dev/ontology/ontology-service-${{ inputs.ontology }} | head -n 2 | tail -n 1 | awk '{print $2}' | tr ',' '\n' | grep -v "latest" | grep -v "\.")
           echo "value=$EXISTING" >> $GITHUB_OUTPUT
 
       - name: Compare and configure
