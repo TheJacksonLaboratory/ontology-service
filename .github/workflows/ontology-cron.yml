@@ -1,7 +1,7 @@
 name: Cron Ontology Service
 on:
     schedule:
-        - cron: "*/30 * * * *"
+        - cron: "0 */4 * * *"
 jobs:
     ontologies:
         strategy:
