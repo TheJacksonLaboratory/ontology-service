@@ -44,7 +44,7 @@ public class GraphService {
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
-		if (termIdList.size() == 0){
+		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
 			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
@@ -59,7 +59,7 @@ public class GraphService {
 
 	public List<SimpleOntologyTerm> getChildren(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
-		if (termIdList.size() == 0){
+		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
 			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
@@ -81,6 +81,6 @@ public class GraphService {
 		log.info("Loading ontology json..");
 		File file = new File(String.format("data/%s-base.json", ontologyName));
 		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());
-		log.info("Finished loading ontology json..");
+		log.info("Finished loading ontology json.");
 	}
 }

@@ -58,8 +58,8 @@ public class OntologyTerm {
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
-		this.synonyms = "";
-		this.xrefs = "";
+		this.synonyms = null;
+		this.xrefs = null;
 	}
 
 	public OntologyTerm(Term term) {
@@ -119,7 +119,6 @@ public class OntologyTerm {
 
 	@ArraySchema(maxItems = 25)
 	@Transient
-	@JsonGetter(value = "translations")
 	public List<Translation> getTranslations() {
 		return translations;
 	}
