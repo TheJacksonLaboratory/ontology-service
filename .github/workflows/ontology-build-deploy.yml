@@ -36,10 +36,11 @@ on:
         type: string
 env:
     GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-    GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
-    GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
     GCLOUD_REGION: us-east1
-    GCLOUD_GCR: us-east1-docker.pkg.dev
+    GCLOUD_GCR: us-docker.pkg.dev
+    GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
+    GCLOUD_REGISTRY_IMAGE_ENV: docker
+    GCLOUD_REGISTRY_IMAGE_PROJECT: ontology
     ONTOLOGY: ${{ inputs.ontology }}
     ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
     ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
@@ -81,20 +82,18 @@ jobs:
           bash ontology.sh ${ONTOLOGY}
       - name: Docker Login
         run: |
-          gcloud auth configure-docker us-east1-docker.pkg.dev
+          gcloud auth configure-docker "${GCLOUD_GCR}"
       - name: Build And Push Docker Image
         env:
-          GCLOUD_IMAGE_REPOSITORY: ${{ secrets.GCLOUD_IMAGE_REPOSITORY }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" | sed -e 's#//#/#' -e 's#^/##'`
-          echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME"
+          export DOCKER_IMAGE=`echo "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG" | sed -e 's#//#/#' -e 's#^/##'`
           ./gradlew check dockerPush --no-daemon
 
       - name: Tag Artifact Registry
         run: |
-          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:latest"
-          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_PROJECT_ID}/${GCLOUD_IMAGE_REPOSITORY}/$SERVICE_NAME:$PROJECT_VERSION"
+          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:latest"
+          gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$PROJECT_VERSION"
       - name: Deploy Cloud Run
         run: |
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
