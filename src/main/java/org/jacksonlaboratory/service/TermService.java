@@ -33,7 +33,7 @@ public class TermService {
 			OntologyTerm term = termOptional.get();
 			if (international){
 				List<Translation> translations = this.translationRepository.findAllByTerm(term);
-				if (translations != null && translations.size() > 0){
+				if (translations != null && !translations.isEmpty()){
 					term.setTranslation(translations);
 				}
 				return Optional.of(term);

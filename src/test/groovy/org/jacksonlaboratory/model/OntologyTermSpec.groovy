@@ -10,7 +10,7 @@ class OntologyTermSpec extends Specification {
 
     void 'test user view works'() {
         given:
-        def term = new OntologyTerm(TermId.of("HP:000001"), 'my name', 'def', '')
+        def term = new OntologyTerm(TermId.of("HP:000001"), 'my name', 'def', null)
         expect:
         JsonMapper mapper = JsonMapper.builder().disable(MapperFeature.DEFAULT_VIEW_INCLUSION).build()
         String result = mapper
@@ -18,5 +18,6 @@ class OntologyTermSpec extends Specification {
 
         result.contains("my name")
         result.contains("def")
+        result == "{\"id\":\"HP:000001\",\"name\":\"my name\",\"definition\":\"def\",\"comment\":null,\"synonyms\":[],\"xrefs\":[],\"translations\":null}"
     }
 }

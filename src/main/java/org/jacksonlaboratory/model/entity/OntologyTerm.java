@@ -58,8 +58,8 @@ public class OntologyTerm {
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
-		this.synonyms = "";
-		this.xrefs = "";
+		this.synonyms = null;
+		this.xrefs = null;
 	}
 
 	public OntologyTerm(Term term) {
@@ -101,7 +101,7 @@ public class OntologyTerm {
 
 	@ArraySchema(maxItems = 25)
 	public List<String> getSynonyms() {
-		if(this.synonyms.isBlank()){
+		if(this.synonyms == null || this.synonyms.isBlank()){
 			return Collections.emptyList();
 		} else {
 			return Arrays.asList(synonyms.split(";"));
@@ -110,7 +110,7 @@ public class OntologyTerm {
 
 	@ArraySchema(maxItems = 25)
 	public List<String> getXrefs() {
-		if(xrefs.isBlank()){
+		if(xrefs == null || xrefs.isBlank()){
 			return Collections.emptyList();
 		} else {
 			return Arrays.asList(xrefs.split(";"));
@@ -119,7 +119,6 @@ public class OntologyTerm {
 
 	@ArraySchema(maxItems = 25)
 	@Transient
-	@JsonGetter(value = "translations")
 	public List<Translation> getTranslations() {
 		return translations;
 	}
