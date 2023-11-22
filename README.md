@@ -3,7 +3,7 @@
 This service allows you to deploy any ontology as a rest api with graph traversal. To support a particular
 ontology you must update `ontology.sh` and if you are leveraging github actions `.github/workflows/ontology-cron.yml`
 
-# Configuration
+### Configuration
 ```sh
     ONTOLOGY=<ontology-to-use>
     ONTOLOGY_SERVICE_LOAD=true
@@ -11,7 +11,7 @@ ontology you must update `ontology.sh` and if you are leveraging github actions 
 ```
 
 
-# Running
+### Running
 
 ```sh
 ./gradlew run
