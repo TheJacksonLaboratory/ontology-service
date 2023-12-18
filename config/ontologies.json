@@ -4,7 +4,7 @@
     "prefix": "hp",
     "github": {
       "api":  "https://api.github.com/repos/obophenotype/human-phenotype-ontology",
-      "home": ""
+      "home": "https://github.com/obophenotype/human-phenotype-ontology"
     },
     "home": "https://hpo.jax.org",
     "api": "https://ontology.jax.org/api/hp/docs",
@@ -28,7 +28,7 @@
     "prefix": "mondo",
     "github": {
       "api":  "https://api.github.com/repos/monarch-initiative/mondo",
-      "home": ""
+      "home": "https://github.com/monarch-initiative/mondo"
     },
     "home": "https://mondo.monarchinitiative.org/",
     "api": "https://ontology.jax.org/api/mondo/docs",
