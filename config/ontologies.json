@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Human Phenotype Ontology",
+    "prefix": "hp",
+    "github": {
+      "api":  "https://api.github.com/repos/obophenotype/human-phenotype-ontology",
+      "home": ""
+    },
+    "home": "https://hpo.jax.org",
+    "api": "https://ontology.jax.org/api/hp/docs",
+    "international": true,
+    "description": ""
+  },
+  {
+    "name": "Medical Action Ontology",
+    "prefix": "maxo",
+    "github": {
+      "api":  "https://api.github.com/repos/monarch-initiative/maxo",
+      "home": "https://github.com/monarch-initiative/MAxO"
+    },
+    "home": "https://github.com/monarch-initiative/MAxO",
+    "api": "https://ontology.jax.org/api/maxo/docs",
+    "international": false,
+    "description": ""
+  },
+  {
+    "name": "Mondo Disease Ontology",
+    "prefix": "mondo",
+    "github": {
+      "api":  "https://api.github.com/repos/monarch-initiative/mondo",
+      "home": ""
+    },
+    "home": "https://mondo.monarchinitiative.org/",
+    "api": "https://ontology.jax.org/api/mondo/docs",
+    "international": false,
+    "description": ""
+  }
+]
