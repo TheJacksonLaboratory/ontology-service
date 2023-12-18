@@ -9,7 +9,7 @@
     "home": "https://hpo.jax.org",
     "api": "https://ontology.jax.org/api/hp/docs",
     "international": true,
-    "description": ""
+    "description": "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease.",
   },
   {
     "name": "Medical Action Ontology",
@@ -21,7 +21,7 @@
     "home": "https://github.com/monarch-initiative/MAxO",
     "api": "https://ontology.jax.org/api/maxo/docs",
     "international": false,
-    "description": ""
+    "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations."
   },
   {
     "name": "Mondo Disease Ontology",
@@ -33,6 +33,6 @@
     "home": "https://mondo.monarchinitiative.org/",
     "api": "https://ontology.jax.org/api/mondo/docs",
     "international": false,
-    "description": ""
+    "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word ‘mundus’ and means ‘for the world.’"
   }
 ]
