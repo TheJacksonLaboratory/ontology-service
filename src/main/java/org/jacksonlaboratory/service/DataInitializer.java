@@ -52,7 +52,9 @@ public class DataInitializer {
 			log.info("Loading ontology terms..");
 			try {
 				this.termRepository.configure();
-				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct().map(OntologyTerm::new).collect(Collectors.toList());
+				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct().map(OntologyTerm::new).peek(
+						t -> t.setDescendantCount(graphService.getDescendantCount(t.getTermId()))
+				).collect(Collectors.toList());
 				this.termRepository.saveAll(terms);
 				log.info("Finished loading ontology terms..");
 				if (international){

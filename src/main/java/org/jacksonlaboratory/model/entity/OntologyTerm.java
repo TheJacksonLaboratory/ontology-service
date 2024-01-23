@@ -1,7 +1,6 @@
 package org.jacksonlaboratory.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +11,6 @@ import org.monarchinitiative.phenol.ontology.data.Dbxref;
 import org.monarchinitiative.phenol.ontology.data.Term;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.ontology.data.TermSynonym;
-import org.jacksonlaboratory.view.Views;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,6 +47,9 @@ public class OntologyTerm {
 	@Column(columnDefinition = "text")
 	private String xrefs;
 
+	@Column(columnDefinition = "int")
+	private int nDescendants;
+
 	@Transient
 	private List<Translation> translations;
 
@@ -84,6 +85,11 @@ public class OntologyTerm {
 		return id.toString();
 	}
 
+	@JsonIgnore
+	public TermId getTermId() {
+		return id;
+	}
+
 	@Schema(maxLength = 255, type = "string", pattern = ".*")
 	public String getName() {
 		return name;
@@ -97,6 +103,10 @@ public class OntologyTerm {
 	@Schema(maxLength = 1000, type = "string", pattern = ".*")
 	public String getComment() {
 		return comment;
+	}
+
+	public int getDescendantCount() {
+		return nDescendants;
 	}
 
 	@ArraySchema(maxItems = 25)
@@ -125,6 +135,10 @@ public class OntologyTerm {
 
 	public void setTranslation(List<Translation> translations) {
 		this.translations = translations;
+	}
+
+	public void setDescendantCount(int count) {
+		this.nDescendants = count;
 	}
 
 	@Override

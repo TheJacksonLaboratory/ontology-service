@@ -1,5 +1,6 @@
 package org.jacksonlaboratory.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
@@ -70,6 +71,11 @@ public class GraphService {
 			}
 			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 		}
+	}
+
+	@JsonIgnore
+	public int getDescendantCount(TermId termId){
+		return (int) this.ontology.graph().getDescendantsStream(termId, false).count();
 	}
 
 	public MinimalOntology getOntology() {
