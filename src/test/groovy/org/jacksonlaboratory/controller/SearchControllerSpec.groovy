@@ -27,14 +27,14 @@ class SearchControllerSpec extends Specification {
 
     void "should search #q and return the fake object"() {
         when:
-        def response = client.toBlocking().retrieve(HttpRequest.GET('/api/hp/search?q='+ q), Argument.listOf(Map.class))
+        def response = client.toBlocking().retrieve(HttpRequest.GET('/api/hp/search?q='+ q), Map.class)
         then:
         termService.searchOntologyTerm(q) >> res
-        response.size() == res.size()
-        response.get(0).get("id").equals(res.get(0).getId())
-        response.get(0).get("name").equals(res.get(0).getName())
-        response.get(0).get("definition").equals(res.get(0).getDefinition())
-
+        response.get("terms").size() == res.size();
+        response.get("terms").get(0).get("id").equals(res.get(0).getId())
+        response.get("terms").get(0).get("name").equals(res.get(0).getName())
+        response.get("terms").get(0).get("definition").equals(res.get(0).getDefinition())
+        response.get("terms").get(0).get("comment").equals(res.get(0).getComment())
         where:
         q | res
         "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")]

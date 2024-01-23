@@ -34,5 +34,17 @@
     "api": "https://ontology.jax.org/api/mondo/docs",
     "international": false,
     "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'"
+  },
+  {
+    "name": "Mammalian Phenotype Ontology",
+    "prefix": "mp",
+    "github": {
+      "api":  "https://api.github.com/repos/mgijax/mammalian-phenotype-ontology",
+      "home": "https://github.com/mgijax/mammalian-phenotype-ontology"
+    },
+    "home": "https://www.informatics.jax.org/vocab/mp_ontology",
+    "api": "https://ontology.jax.org/api/mp/docs",
+    "international": false,
+    "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus."
   }
 ]
