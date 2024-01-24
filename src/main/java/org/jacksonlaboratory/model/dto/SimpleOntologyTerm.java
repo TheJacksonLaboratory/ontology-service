@@ -1,6 +1,5 @@
 package org.jacksonlaboratory.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import io.micronaut.serde.annotation.Serdeable;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.model.entity.Translation;
@@ -13,12 +12,15 @@ public class SimpleOntologyTerm {
 	private final String id;
 	private final String name;
 
+	private final int nDescendant;
+
 	private final List<Translation> translations;
 
 	public SimpleOntologyTerm(OntologyTerm ontologyTerm) {
 		this.id = ontologyTerm.getId();
 		this.name = ontologyTerm.getName();
 		this.translations = ontologyTerm.getTranslations();
+		this.nDescendant = ontologyTerm.getDescendantCount();
 	}
 
 	public String getId() {
@@ -29,9 +31,12 @@ public class SimpleOntologyTerm {
 		return name;
 	}
 
-	@JsonGetter(value = "translations")
 	public List<Translation> getTranslations() {
 		return translations;
+	}
+
+	public int getDescendantCount() {
+		return nDescendant;
 	}
 
 	@Override

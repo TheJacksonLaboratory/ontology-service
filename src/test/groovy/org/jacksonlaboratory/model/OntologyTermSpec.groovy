@@ -18,6 +18,6 @@ class OntologyTermSpec extends Specification {
 
         result.contains("my name")
         result.contains("def")
-        result == "{\"id\":\"HP:000001\",\"name\":\"my name\",\"definition\":\"def\",\"comment\":null,\"synonyms\":[],\"xrefs\":[],\"translations\":null}"
+        result == "{\"id\":\"HP:000001\",\"name\":\"my name\",\"definition\":\"def\",\"comment\":null,\"synonyms\":[],\"xrefs\":[],\"translations\":null,\"descendantCount\":0}"
     }
 }
