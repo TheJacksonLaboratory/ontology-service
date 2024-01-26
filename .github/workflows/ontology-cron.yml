@@ -16,6 +16,9 @@ jobs:
                     - ontology: "maxo"
                       international: false
                       repo: "https://api.github.com/repos/monarch-initiative/maxo"
+                    - ontology: "mp"
+                      international: false
+                      repo: "https://api.github.com/repos/mgijax/mammalian-phenotype-ontology"
 
         uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
         with:
