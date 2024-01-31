@@ -5,7 +5,7 @@ plugins {
     id("io.micronaut.test-resources") version "4.1.0"
 }
 
-version = "0.5.7"
+version = "0.5.8"
 group = "org.jacksonlaboratory"
 
 repositories {
