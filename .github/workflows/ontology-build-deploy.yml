@@ -102,7 +102,7 @@ jobs:
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
-            --memory 4Gi --cpu 2 --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+            --memory 4Gi --cpu 2 --min-instances 1 --max-instances 5 --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
       
           echo "Invoke endpoint:"
           gcloud run services list --platform managed --format json | jq -r \
