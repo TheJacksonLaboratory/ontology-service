@@ -5,7 +5,7 @@ plugins {
     id("io.micronaut.test-resources") version "4.1.0"
 }
 
-version = "0.5.8"
+version = "0.5.9"
 group = "org.jacksonlaboratory"
 
 repositories {
@@ -26,7 +26,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.flywaydb:flyway-mysql")
-    runtimeOnly("com.h2database:h2:2.1.214")
+    runtimeOnly(g"com.h2database:h2:2.1.214")
     implementation('org.apache.lucene:lucene-core:8.5.2')
     implementation('org.apache.lucene:lucene-queryparser:8.5.2')
     implementation('org.hibernate.search:hibernate-search-mapper-orm:6.1.8.Final')

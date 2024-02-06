@@ -7,6 +7,7 @@ import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.model.dto.SimpleOntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
+import org.jacksonlaboratory.model.entity.OntologyTermBuilder;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.MinimalOntologyLoader;
@@ -45,32 +46,31 @@ public class GraphService {
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
+		return unpack(termIdList);
+	}
+
+	public List<SimpleOntologyTerm> getChildren(TermId termId) {
+		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
+		return unpack(termIdList);
+	}
+
+	private List<SimpleOntologyTerm> unpack(List<TermId> termIdList){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
 			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
 			if (international){
-				for (OntologyTerm term: termList) {
-					term.setTranslation(this.translationRepository.findAllByTerm(term));
-				}
+				termList = addTranslations(termList);
 			}
 			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
 		}
 	}
 
-	public List<SimpleOntologyTerm> getChildren(TermId termId) {
-		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
-		if (termIdList.isEmpty()){
-			return Collections.emptyList();
-		} else {
-			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
-			if (international){
-				for (OntologyTerm term: termList) {
-					term.setTranslation(this.translationRepository.findAllByTerm(term));
-				}
-			}
-			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
-		}
+	private List<OntologyTerm> addTranslations(List<OntologyTerm> terms){
+		return terms.stream().map(term ->
+				new OntologyTermBuilder().fromOntologyTerm(term)
+						.setTranslations(this.translationRepository.findAllByTerm(term)).createOntologyTerm()
+		).collect(Collectors.toList());
 	}
 
 	@JsonIgnore

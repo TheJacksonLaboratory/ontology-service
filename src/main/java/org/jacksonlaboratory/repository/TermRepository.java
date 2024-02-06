@@ -1,5 +1,6 @@
 package org.jacksonlaboratory.repository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,8 @@ public interface TermRepository {
 
 	Optional<List<OntologyTerm>> findByTermIdIn(@NotEmpty List<TermId> ids);
 
-	List<OntologyTerm> search(@NotBlank String query);
+	@Transactional
+	List<OntologyTerm> search(String searchTerm, boolean prefixSearch);
 
 	void saveAll(@NotEmpty List<OntologyTerm> terms);
 

@@ -31,13 +31,13 @@ public class SearchController {
 	public SearchDto search(
 			@QueryValue("q") @Schema(minLength = 3, maxLength = 250, type = "string", pattern = ".*")  String query,
 			@QueryValue(value = "page", defaultValue = "0") @Schema(maxLength = 1000, type = "number") int page,
-			@QueryValue(value = "limit", defaultValue = "10") @Schema(maxLength = 1, type = "number") int limit
+			@QueryValue(value = "limit", defaultValue = "10") @Schema(maxLength = 1000, type = "number") int limit
 	) {
-		page = page * limit;
 		List<OntologyTerm> terms = this.termService.searchOntologyTerm(query);
 		if (limit == -1) {
 			return new SearchDto(terms,  terms.size());
 		} else {
+			page = page * limit;
 			return new SearchDto(terms.stream().skip(page).limit(limit).collect(Collectors.toList()),  terms.size());
 		}
 	}
