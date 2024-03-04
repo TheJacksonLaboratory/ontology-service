@@ -1,7 +1,5 @@
 package org.jacksonlaboratory.ingest
 
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
-import org.jacksonlaboratory.ingest.BabelonLine
 import org.jacksonlaboratory.model.Language
 import org.jacksonlaboratory.model.PredicateType
 import org.jacksonlaboratory.model.TranslationStatus

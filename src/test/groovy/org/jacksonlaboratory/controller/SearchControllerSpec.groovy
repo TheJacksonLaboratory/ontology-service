@@ -37,7 +37,7 @@ class SearchControllerSpec extends Specification {
         response.get("terms").get(0).get("comment").equals(res.get(0).getComment())
         where:
         q | res
-        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment")]
+        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)]
     }
 
     @MockBean(TermService)

@@ -16,7 +16,7 @@ class TranslationProcessorTest extends Specification {
         def babelonNavigator = BabelonIngestor.of().load(Path.of("src/test/resources/hp-test.babelon.tsv"))
         def languages = babelonNavigator.getAggregatedLanguageLinesById(term)
         def language = Language.NL
-        def ontology_term = new OntologyTerm(term, "Abnormality of body height", "", "")
+        def ontology_term = new OntologyTerm(term, "Abnormality of body height", "", "", "","", 0)
         def translation = TranslationProcessor.processTranslation(ontology_term, language, languages.get().get(language)).get(0)
         expect:
         translation.language.equals(Language.NL)
