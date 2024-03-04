@@ -59,6 +59,11 @@ public class GraphService {
 		return unpack(termIdList);
 	}
 
+	public List<SimpleOntologyTerm> getDescendants(TermId termId){
+		List<TermId> termIdList = this.ontology.graph().getDescendantsStream(termId, false).collect(Collectors.toList());
+		return unpack(termIdList);
+	}
+
 	List<SimpleOntologyTerm> unpack(List<TermId> termIdList){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();

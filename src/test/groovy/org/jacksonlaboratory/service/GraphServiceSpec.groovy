@@ -5,6 +5,7 @@ import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.jacksonlaboratory.model.Language
 import org.jacksonlaboratory.model.TranslationStatus
+import org.jacksonlaboratory.model.entity.OntologyTerm
 import org.jacksonlaboratory.model.entity.OntologyTermBuilder
 import org.jacksonlaboratory.model.entity.Translation
 import org.jacksonlaboratory.repository.TermRepository
@@ -49,12 +50,21 @@ class GraphServiceSpec extends Specification {
         terms.size() == 0
     }
 
-    void 'test graph service get children'() {
+    void 'test graph service descendant count'() {
         when:
-        def cound = graphService.getDescendantCount(TermId.of("HP:0000001"))
+        def count = graphService.getDescendantCount(TermId.of("HP:0000001"))
         then:
-        cound == 4
+        count == 4
     }
+
+    void 'test graph service get descendants'() {
+        when:
+        def terms = graphService.getDescendants(TermId.of("HP:0000001"))
+        then:
+        1 * termRepository.findByTermIdIn(_) >> Optional.of([new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).createOntologyTerm()]);
+        terms.size() == 3
+    }
+
 
     void 'test graph service add unpack'() {
         when:
