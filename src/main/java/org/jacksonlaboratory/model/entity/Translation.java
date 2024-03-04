@@ -18,7 +18,7 @@ public class Translation {
 	@JsonIgnore
 	private Long id;
 
-	@ManyToOne(targetEntity = OntologyTerm.class, cascade=CascadeType.ALL)
+	@ManyToOne(targetEntity = OntologyTerm.class)
 	@JsonIgnore
 	private OntologyTerm term;
 
@@ -27,7 +27,6 @@ public class Translation {
 	private String name;
 
 	@Column(columnDefinition = "text")
-	@JsonIgnore
 	private String definition;
 
 	private TranslationStatus status;
