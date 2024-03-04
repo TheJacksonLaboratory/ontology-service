@@ -50,3 +50,4 @@ api-url:
 ontology: ${ONTOLOGY:unknown}
 load: ${ONTOLOGY_SERVICE_LOAD:true}
 international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
+workingdir: "data"

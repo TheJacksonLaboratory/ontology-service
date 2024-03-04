@@ -14,6 +14,7 @@ class OntologyServiceSpec extends Specification {
     void 'test it works'() {
         expect:
         application.running
+
     }
 
 }

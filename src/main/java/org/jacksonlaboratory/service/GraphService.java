@@ -5,6 +5,7 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
+import org.jacksonlaboratory.ingest.OntologyDataResolver;
 import org.jacksonlaboratory.model.dto.SimpleOntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.model.entity.OntologyTermBuilder;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +37,7 @@ public class GraphService {
 	private final TranslationRepository translationRepository;
 
 	@Property(name = "ontology") String ontologyName;
+	@Property(name = "workingdir") String directory;
 
 	@Value("${international}")
 	boolean international;
@@ -54,7 +57,7 @@ public class GraphService {
 		return unpack(termIdList);
 	}
 
-	private List<SimpleOntologyTerm> unpack(List<TermId> termIdList){
+	List<SimpleOntologyTerm> unpack(List<TermId> termIdList){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
@@ -66,7 +69,7 @@ public class GraphService {
 		}
 	}
 
-	private List<OntologyTerm> addTranslations(List<OntologyTerm> terms){
+	List<OntologyTerm> addTranslations(List<OntologyTerm> terms){
 		return terms.stream().map(term ->
 				new OntologyTermBuilder().fromOntologyTerm(term)
 						.setTranslations(this.translationRepository.findAllByTerm(term)).createOntologyTerm()
@@ -85,7 +88,8 @@ public class GraphService {
 	@PostConstruct
 	public void initialize() {
 		log.info("Loading ontology json..");
-		File file = new File(String.format("data/%s-base.json", ontologyName));
+		OntologyDataResolver dataResolver = OntologyDataResolver.of(Path.of(directory), this.ontologyName);
+		File file = new File(dataResolver.ontologyJson().toUri());
 		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());
 		log.info("Finished loading ontology json.");
 	}

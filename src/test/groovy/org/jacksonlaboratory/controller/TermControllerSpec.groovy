@@ -57,7 +57,7 @@ class TermControllerSpec extends Specification {
         "HP:000003"  | Optional.of(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0))
     }
 
-    void "should return parents"() {
+    void "should return children"() {
         when:
         def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q + '/children'), Argument.listOf(Map.class))
         then:
@@ -68,6 +68,19 @@ class TermControllerSpec extends Specification {
         q | res
         "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", 0))]
     }
+
+    void "should return parents"() {
+        when:
+        def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q + '/parents'), Argument.listOf(Map.class))
+        then:
+        1 * graphService.getParents(TermId.of(q)) >> res
+        response.body().size() == res.size()
+        response.status().getCode().toInteger() == 200
+        where:
+        q | res
+        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", 0))]
+    }
+
 
     void "should return bad request"(){
         when:
