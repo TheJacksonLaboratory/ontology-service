@@ -36,6 +36,8 @@ public class GraphService {
 	private final TermRepository termRepository;
 	private final TranslationRepository translationRepository;
 
+	private OntologyDataResolver dataResolver;
+
 	@Property(name = "ontology") String ontologyName;
 	@Property(name = "workingdir") String directory;
 
@@ -85,10 +87,14 @@ public class GraphService {
 		return ontology;
 	}
 
+	public OntologyDataResolver getDataResolver() {
+		return dataResolver;
+	}
+
 	@PostConstruct
 	public void initialize() {
 		log.info("Loading ontology json..");
-		OntologyDataResolver dataResolver = OntologyDataResolver.of(Path.of(directory), this.ontologyName);
+		this.dataResolver = OntologyDataResolver.of(Path.of(directory), this.ontologyName);
 		File file = new File(dataResolver.ontologyJson().toUri());
 		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());
 		log.info("Finished loading ontology json.");

@@ -52,7 +52,7 @@
         } ]
       },
       "type" : "CLASS",
-      "lbl" : "Fake term 2"
+      "lbl" : "Test term 2"
     } , {
       "id" : "http://purl.obolibrary.org/obo/HP_0000003",
       "meta" : {

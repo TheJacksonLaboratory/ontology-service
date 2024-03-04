@@ -48,5 +48,9 @@ public class OntologyDataResolver {
 		public Path ontologyJson(){
 			return dataDirectory.resolve(String.format("%s-base.json", ontology));
 		}
+
+		public Path babelonFile(){
+		return dataDirectory.resolve(String.format("%s-all.babelon.tsv", ontology));
+	}
 }
 

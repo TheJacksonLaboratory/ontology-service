@@ -87,6 +87,7 @@ public class TermRepositoryImpl implements TermRepository {
 			}
 			this.entityManager.persist(terms.get(i));
 		}
+		this.entityManager.flush();
 	}
 
 	@Transactional

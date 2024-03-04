@@ -18,7 +18,7 @@ public class Translation {
 	@JsonIgnore
 	private Long id;
 
-	@ManyToOne(targetEntity = OntologyTerm.class)
+	@ManyToOne(targetEntity = OntologyTerm.class, cascade=CascadeType.ALL)
 	@JsonIgnore
 	private OntologyTerm term;
 

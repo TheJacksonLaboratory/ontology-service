@@ -13,7 +13,7 @@ class TranslationProcessorTest extends Specification {
     void "test babelon line to translation"(){
         given:
         def term = TermId.of("HP:0000002")
-        def babelonNavigator = BabelonIngestor.of().load(Path.of("src/test/resources/hp-test.babelon.tsv"))
+        def babelonNavigator = BabelonIngestor.of().load(Path.of("src/test/resources/hp-all.babelon.tsv"))
         def languages = babelonNavigator.getAggregatedLanguageLinesById(term)
         def language = Language.NL
         def ontology_term = new OntologyTerm(term, "Abnormality of body height", "", "", "","", 0)
