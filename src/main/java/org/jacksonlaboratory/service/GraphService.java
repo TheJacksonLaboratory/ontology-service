@@ -26,6 +26,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Stores a {@link MinimalOntology} and provides associated methods for traversal
+ */
 @Singleton
 @Requires(property = "ontology")
 @Transactional
@@ -68,7 +71,7 @@ public class GraphService {
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
-			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList).orElse(Collections.emptyList());
+			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList);
 			if (international){
 				termList = addTranslations(termList);
 			}

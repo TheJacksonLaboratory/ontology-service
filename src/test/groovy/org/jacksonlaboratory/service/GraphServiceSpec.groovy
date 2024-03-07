@@ -38,7 +38,7 @@ class GraphServiceSpec extends Specification {
         when:
             def terms = graphService.getParents(TermId.of("HP:0000004"))
         then:
-            1 * termRepository.findByTermIdIn(_) >> Optional.of([new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm()]);
+            1 * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm()];
             terms.size() == 1
     }
 
@@ -46,7 +46,7 @@ class GraphServiceSpec extends Specification {
         when:
         def terms = graphService.getChildren(TermId.of("HP:0000004"))
         then:
-        1 * termRepository.findByTermIdIn(_) >> Optional.of([]);
+        1 * termRepository.findByTermIdIn(_) >> [];
         terms.size() == 0
     }
 
@@ -61,7 +61,7 @@ class GraphServiceSpec extends Specification {
         when:
         def terms = graphService.getDescendants(TermId.of("HP:0000001"))
         then:
-        1 * termRepository.findByTermIdIn(_) >> Optional.of([new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).createOntologyTerm()]);
+        1 * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).createOntologyTerm()];
         terms.size() == 3
     }
 
@@ -70,10 +70,10 @@ class GraphServiceSpec extends Specification {
         when:
         def u = graphService.unpack(l)
         then:
-        _ * termRepository.findByTermIdIn(_) >> Optional.of([]);
+        _ * termRepository.findByTermIdIn(_) >> []
         u.size() == 0
         where:
-        l << [["ONTOLOGY"], []]
+        l << [[TermId.of("HP:00001")], []]
     }
 
     void 'test graph service add translation'() {

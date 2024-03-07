@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * The default implementation of a babelon file file
+ */
 public class BabelonIngestorDefault implements BabelonIngestor {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BabelonIngestorDefault.class);
 

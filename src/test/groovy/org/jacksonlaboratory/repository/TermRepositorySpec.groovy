@@ -23,8 +23,7 @@ class TermRepositorySpec extends Specification {
         given:
         def res = termRepository.findAll()
         expect:
-        res.isPresent()
-        res.get().size() == 5
+        res.size() == 5
     }
 
     void "test find by term id"(){
@@ -40,8 +39,7 @@ class TermRepositorySpec extends Specification {
         def q = [TermId.of("HP:0000002"), TermId.of("HP:0000001")]
         def res = termRepository.findByTermIdIn(q)
         expect:
-        res.isPresent()
-        res.get().size() == 2
+        res.size() == 2
     }
 
     void "test search"(){

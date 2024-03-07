@@ -29,9 +29,8 @@ public class TermRepositoryImpl implements TermRepository {
 
 	@Override
 	@ReadOnly
-	public Optional<List<OntologyTerm>> findAll(){
-		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t", OntologyTerm.class).getResultStream().collect(Collectors.toList());
-		return Optional.of(terms);
+	public List<OntologyTerm> findAll(){
+		return entityManager.createQuery("SELECT t FROM OntologyTerm t", OntologyTerm.class).getResultStream().collect(Collectors.toList());
 	}
 
 	@Override
@@ -42,11 +41,10 @@ public class TermRepositoryImpl implements TermRepository {
 	}
 
 	@Override
-	public Optional<List<OntologyTerm>> findByTermIdIn(List<TermId> ids) {
+	public List<OntologyTerm> findByTermIdIn(List<TermId> ids) {
 		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id in :param1", OntologyTerm.class).setParameter("param1", ids).getResultList();
-		Collections.sort(terms,
-				Comparator.comparing(item -> ids.indexOf(TermId.of(item.getId()))));
-		return Optional.of(terms);
+		terms.sort(Comparator.comparing(item -> ids.indexOf(TermId.of(item.getId()))));
+		return terms;
 	}
 
 	/*

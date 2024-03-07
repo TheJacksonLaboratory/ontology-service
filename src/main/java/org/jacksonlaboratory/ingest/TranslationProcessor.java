@@ -9,6 +9,9 @@ import org.jacksonlaboratory.model.entity.Translation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Create translations from babelon file
+ */
 public class TranslationProcessor {
 
 	/**

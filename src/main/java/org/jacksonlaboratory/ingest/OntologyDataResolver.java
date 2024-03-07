@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ *  This builds the data directory path and validates required files exist
+ */
 public class OntologyDataResolver {
 		private static final Logger LOGGER = LoggerFactory.getLogger(OntologyDataResolver.class);
 
