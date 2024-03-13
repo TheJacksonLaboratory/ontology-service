@@ -7,6 +7,9 @@ import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.util.Objects;
 
+/**
+ * A representation of a line in a babelon (translation) file
+ */
 public class BabelonLine {
 
 	private final Language source_language;

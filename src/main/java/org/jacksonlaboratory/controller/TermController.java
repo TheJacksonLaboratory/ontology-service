@@ -66,4 +66,15 @@ public class TermController {
         return this.graphService.getChildren(termId);
     }
 
+    /**
+     * Get the descendants of the ontology id
+     * @param id The ontology term id
+     * @return The descendants of the term id
+     */
+    @Get(uri="/{id}/descendants", produces="application/json")
+    public List<SimpleOntologyTerm> descendants(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id){
+        TermId termId = TermId.of(id);
+        return this.graphService.getDescendants(termId);
+    }
+
 }

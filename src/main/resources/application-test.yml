@@ -1,6 +1,8 @@
 micronaut:
+  server:
+    port: 8086
   application:
-    name: ontology-service-${ONTOLOGY:unknown}
+    name: ontology-service-${ONTOLOGY:hp}
   router:
     static-resources:
       swagger:
@@ -44,6 +46,7 @@ jackson:
 
 api-url:
   prefix: /api
-ontology: ${ONTOLOGY}
-load: ${ONTOLOGY_SERVICE_LOAD:false}
-international: ${ONTOLOGY_SERVICE_INTERNATIONAL:false}
+ontology: hp
+load: false
+international: false
+workingdir: "src/test/resources"

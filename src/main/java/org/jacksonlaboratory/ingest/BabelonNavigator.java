@@ -6,6 +6,9 @@ import org.monarchinitiative.phenol.ontology.data.TermId;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * An access class for getting BabelonData
+ */
 public class BabelonNavigator {
 
 	private final List<BabelonData> babelonData;

@@ -1,11 +1,12 @@
 plugins {
-    id("groovy") 
+    id("groovy")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.1.0"
     id("io.micronaut.test-resources") version "4.1.0"
+    id("jacoco")
 }
 
-version = "0.5.8"
+version = "0.5.9"
 group = "org.jacksonlaboratory"
 
 repositories {
@@ -101,6 +102,22 @@ micronaut {
 tasks.withType(JavaCompile) {
     options.fork = true
     options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY}/docs/,swagger-ui.spec.url=/api/${System.env.ONTOLOGY}/${project.name}-${System.env.ONTOLOGY}-${project.version}.yml".toString()
+}
+
+test {
+    finalizedBy("jacocoTestReport")
+}
+
+jacocoTestReport {
+    dependsOn("test")
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "org/jacksonlaboratory/view/*",
+                    "org/jacksonlaboratory/Application.class"
+            ])
+        }))
+    }
 }
 
 

@@ -11,7 +11,7 @@ class BabelonIngestorTest extends Specification {
 
     void "test ingest simple babelon file"(){
         given:
-        def babelonNavigator = BabelonIngestor.of().load(Path.of("src/test/resources/hp-test.babelon.tsv"))
+        def babelonNavigator = BabelonIngestor.of().load(Path.of("src/test/resources/hp-all.babelon.tsv"))
         expect:
         babelonNavigator.numberTermsTranslated() == 3
         def translation = babelonNavigator.getAggregatedLanguageLinesById(TermId.of("HP:0000002"))

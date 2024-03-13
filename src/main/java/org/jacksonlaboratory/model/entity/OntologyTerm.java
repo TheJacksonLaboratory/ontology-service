@@ -7,17 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.persistence.*;
 import org.jacksonlaboratory.model.converter.TermIdAttributeConverter;
-import org.monarchinitiative.phenol.ontology.data.Dbxref;
-import org.monarchinitiative.phenol.ontology.data.Term;
 import org.monarchinitiative.phenol.ontology.data.TermId;
-import org.monarchinitiative.phenol.ontology.data.TermSynonym;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @NamedNativeQuery(
 		name="searchQuery",
@@ -48,28 +43,31 @@ public class OntologyTerm {
 	private String xrefs;
 
 	@Column(columnDefinition = "int")
-	private int nDescendants;
+	private int descendantCount;
 
 	@Transient
 	private List<Translation> translations;
 
 	@Creator
-	public OntologyTerm(TermId id, String name, String definition, String comment) {
+	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, int descendantCount) {
 		this.id = id;
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
-		this.synonyms = null;
-		this.xrefs = null;
+		this.synonyms = synonyms;
+		this.xrefs = xrefs;
+		this.descendantCount = descendantCount;
 	}
 
-	public OntologyTerm(Term term) {
-		this.id = term.id();
-		this.name = term.getName();
-		this.definition = term.getDefinition();
-		this.comment = term.getComment();
-		this.synonyms = term.getSynonyms().stream().filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(";"));
-		this.xrefs = term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(";"));
+	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, int descendantCount, List<Translation> translations) {
+		this.id = id;
+		this.name = name;
+		this.definition = definition;
+		this.comment = comment;
+		this.synonyms = synonyms;
+		this.xrefs = xrefs;
+		this.descendantCount = descendantCount;
+		this.translations = translations;
 	}
 
 	public OntologyTerm() {
@@ -106,7 +104,7 @@ public class OntologyTerm {
 	}
 
 	public int getDescendantCount() {
-		return nDescendants;
+		return descendantCount;
 	}
 
 	@ArraySchema(maxItems = 25)
@@ -133,14 +131,6 @@ public class OntologyTerm {
 		return translations;
 	}
 
-	public void setTranslation(List<Translation> translations) {
-		this.translations = translations;
-	}
-
-	public void setDescendantCount(int count) {
-		this.nDescendants = count;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -153,4 +143,5 @@ public class OntologyTerm {
 	public int hashCode() {
 		return Objects.hash(uid, id, name, definition, comment, synonyms, xrefs, translations);
 	}
+
 }
