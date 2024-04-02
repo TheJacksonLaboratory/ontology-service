@@ -41,7 +41,7 @@ env:
     GCLOUD_REGISTRY_PROJECT_ID: ${{ secrets.GCLOUD_REGISTRY_PROJECT_ID }}
     GCLOUD_REGISTRY_IMAGE_ENV: docker
     GCLOUD_REGISTRY_IMAGE_PROJECT: ontology
-    ONTOLOGY: ${{ inputs.ontology }}
+    ONTOLOGY_SERVICE_ONTOLOGY: ${{ inputs.ontology }}
     ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
     ONTOLOGY_SERVICE_INTERNATIONAL: ${{ inputs.international }}
     SERVICE_NAME: ontology-service-${{ inputs.ontology }}
@@ -79,7 +79,7 @@ jobs:
           echo "PROJECT_VERSION=$(./gradlew properties -q | awk '/^version:/ {print $2}')" >> $GITHUB_ENV
       - name: Get ontology data
         run: |
-          bash ontology.sh ${ONTOLOGY}
+          bash ontology.sh ${ONTOLOGY_SERVICE_ONTOLOGY}
       - name: Docker Login
         run: |
           gcloud auth configure-docker "${GCLOUD_GCR}"
