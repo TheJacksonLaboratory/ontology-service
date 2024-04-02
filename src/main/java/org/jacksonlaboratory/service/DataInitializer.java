@@ -54,7 +54,7 @@ public class DataInitializer {
 	@Transactional
 	public void init() {
 		if(shouldLoad){
-			log.info("Loading ontology terms..");
+			log.info(String.format("Loading %s ontology terms..", graphService.ontologyName));
 			try {
 				this.termRepository.configure();
 				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct().map(term ->

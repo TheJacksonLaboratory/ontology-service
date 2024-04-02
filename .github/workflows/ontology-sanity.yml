@@ -1,7 +1,7 @@
 name: Sanity Check Application
 on: pull_request
 env:
-  ONTOLOGY: hp
+  ONTOLOGY_SERVICE_ONTOLOGY: hp
   ONTOLOGY_SERVICE_LOAD: true
 jobs:
   build:

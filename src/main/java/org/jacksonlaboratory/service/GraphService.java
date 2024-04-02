@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
  * Stores a {@link MinimalOntology} and provides associated methods for traversal
  */
 @Singleton
-@Requires(property = "ontology")
 @Transactional
 public class GraphService {
 
@@ -41,8 +40,8 @@ public class GraphService {
 
 	private OntologyDataResolver dataResolver;
 
-	@Property(name = "ontology") String ontologyName;
-	@Property(name = "workingdir") String directory;
+	@Value("${ontology}") String ontologyName;
+	@Value("${workingdir}") String directory;
 
 	@Value("${international}")
 	boolean international;
@@ -101,7 +100,7 @@ public class GraphService {
 
 	@PostConstruct
 	public void initialize() {
-		log.info("Loading ontology json..");
+		log.info(String.format("Loading %s ontology json..", ontologyName));
 		this.dataResolver = OntologyDataResolver.of(Path.of(directory), this.ontologyName);
 		File file = new File(dataResolver.ontologyJson().toUri());
 		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());

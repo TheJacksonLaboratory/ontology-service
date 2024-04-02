@@ -2,7 +2,7 @@ micronaut:
   server:
     port: 8086
   application:
-    name: ontology-service-${ONTOLOGY:hp}
+    name: ontology-service-hp
   router:
     static-resources:
       swagger:
