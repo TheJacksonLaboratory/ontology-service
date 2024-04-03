@@ -4,9 +4,10 @@ plugins {
     id("io.micronaut.application") version "4.1.0"
     id("io.micronaut.test-resources") version "4.1.0"
     id("jacoco")
+    id("com.dorongold.task-tree") version "3.0.0"
 }
 
-version = "0.5.9"
+version = "0.5.10"
 group = "org.jacksonlaboratory"
 
 repositories {
@@ -72,7 +73,7 @@ tasks {
     dockerfile {
         baseImage("openjdk:17-ea-slim-buster")
         copyFile("data/", "data/")
-        environmentVariable(['ONTOLOGY':"${System.env.ONTOLOGY}".toString(),
+        environmentVariable(['ONTOLOGY_SERVICE_ONTOLOGY':"${System.env.ONTOLOGY_SERVICE_ONTOLOGY}".toString(),
                              'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}".toString(),
                              'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}".toString()] )
         entryPoint("java", "-Xmx6g", "-Xms1024m", "-jar", "/home/app/application.jar")
@@ -101,10 +102,11 @@ micronaut {
 
 tasks.withType(JavaCompile) {
     options.fork = true
-    options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY}/docs/,swagger-ui.spec.url=/api/${System.env.ONTOLOGY}/${project.name}-${System.env.ONTOLOGY}-${project.version}.yml".toString()
+    options.forkOptions.jvmArgs << "-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop,swagger-ui.js.url=/api/${System.env.ONTOLOGY_SERVICE_ONTOLOGY}/docs/res/,swagger-ui.theme.url=/api/${System.env.ONTOLOGY_SERVICE_ONTOLOGY}/docs/,swagger-ui.spec.url=/api/${System.env.ONTOLOGY_SERVICE_ONTOLOGY}/${project.name}-${System.env.ONTOLOGY_SERVICE_ONTOLOGY}-${project.version}.yml".toString()
 }
 
 test {
+    systemProperty("micronaut.environments", "test")
     finalizedBy("jacocoTestReport")
 }
 

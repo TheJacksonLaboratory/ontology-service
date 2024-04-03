@@ -5,7 +5,7 @@ ontology you must update `ontology.sh` and if you are leveraging github actions 
 
 ### Configuration
 ```sh
-    ONTOLOGY=<ontology-to-use>
+    ONTOLOGY_SERVICE_ONTOLOGY=<ontology-to-use>
     ONTOLOGY_SERVICE_LOAD=true
     ONTOLOGY_SERVICE_INTERNATIONAL=<true if babelon translations enabled>
 ```
