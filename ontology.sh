@@ -13,4 +13,7 @@ then
 elif [ $1 == "maxo" ]
 then
  wget -P data/ --no-use-server-timestamps https://purl.obolibrary.org/obo/maxo/maxo-base.json
+elif [ $1 == "cl" ]
+then
+ wget -P data/ --no-use-server-timestamps https://purl.obolibrary.org/obo/cl/cl-base.json
 fi
