@@ -46,5 +46,17 @@
     "api": "https://ontology.jax.org/api/mp/docs",
     "international": false,
     "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus."
+  },
+  {
+    "name": "Cell Ontology",
+    "prefix": "cl",
+    "github": {
+      "api":  "https://api.github.com/repos/obophenotype/cell-ontology",
+      "home": "https://github.com/obophenotype/cell-ontology"
+    },
+    "home": "https://obophenotype.github.io/cell-ontology/",
+    "api": "https://ontology.jax.org/api/cl/docs",
+    "international": false,
+    "description": "The Cell Ontology (CL) is an OBO Foundry ontology covering the domain of canonical, natural biological cell types."
   }
 ]
