@@ -1,32 +1,20 @@
 name: Cron Ontology Service
-on:
-    schedule:
-        - cron: "0 */4 * * *"
+#on:
+#    schedule:
+#        - cron: "0 */4 * * *"
+on: workflow_dispatch
 jobs:
     ontologies:
         strategy:
             matrix:
                 include:
                     - ontology: "hp"
-                      international: true
-                      repo: "https://api.github.com/repos/obophenotype/human-phenotype-ontology"
-                    - ontology: "mondo"
-                      international: false
-                      repo: "https://api.github.com/repos/monarch-initiative/mondo"
-                    - ontology: "maxo"
-                      international: false
-                      repo: "https://api.github.com/repos/monarch-initiative/maxo"
-                    - ontology: "mp"
-                      international: false
-                      repo: "https://api.github.com/repos/mgijax/mammalian-phenotype-ontology"
-                    - ontology: "cl"
-                      international: false
-                      repo: "https://api.github.com/repos/obophenotype/cell-ontology"
+#                    - ontology: "mondo"
+#                    - ontology: "maxo"
+#                    - ontology: "mp"
+#                    - ontology: "cl"
 
-        uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
+        uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@feature/purl-impl
         with:
             ontology: ${{ matrix.ontology }}
-            international: ${{ matrix.international }}
-            load: true
-            repo: ${{ matrix.repo }}
         secrets: inherit

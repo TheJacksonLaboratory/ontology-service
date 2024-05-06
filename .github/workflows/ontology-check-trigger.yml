@@ -14,16 +14,13 @@ on:
         description: 'Should load the data?'
         default: true
         type: boolean
-      repo:
-        description: 'The full API url for repo'
-        required: true
-        type: string
 jobs:
   watcher:
     runs-on: ubuntu-latest
     outputs:
      sha: ${{ steps.sha.outputs.value }}
      deploy: ${{ steps.compare.outputs.value }}
+     international: ${{steps.international.outputs.value}}
     steps:
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -33,35 +30,52 @@ jobs:
       - name: Setup Google Cloud CLI
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: Get latest tag_name
-        uses: sergeysova/jq-action@v2
-        id: tag
-        with:
-          cmd: "curl ${{ inputs.repo }}/releases/latest | jq -r '.tag_name'"
+      - name: Install jq
+        run: sudo apt-get install jq
 
-      - name: Get latest SHA
+      - name: Get ontology config json
+        run: |
+          wget https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/main/config/ontologies.json
+
+      - name: Subset ontology config json
+        run: jq -r '.[] | select(.prefix=="${{ inputs.ontology }}")' ontologies.json > target.json
+
+      - name: Get international config
         uses: sergeysova/jq-action@v2
+        id: international
+        with:
+          cmd: "jq -r '.international' target.json"
+
+      - name: Get purl for ontology file
+        uses: sergeysova/jq-action@v2
+        id: purl
+        with:
+          cmd: "jq -r '.base_file' target.json"
+
+      - name: Generate sha1 from purl file
         id: sha
-        with:
-          cmd: "curl ${{ inputs.repo }}/git/ref/tags/${{ steps.tag.outputs.value }} | jq -r '.object.sha' | cut -c -7"
+        run: |
+          SHA=$(curl ${{ steps.purl.outputs.value }} | shasum | cut -c -7)
+          echo "value=$SHA" >> $GITHUB_OUTPUT
 
-      - name:  Get existing SHA for service
+      - name: Get existing sha from service
         id: existing
         run:  |
           EXISTING=$(gcloud container images list-tags us-docker.pkg.dev/jax-cs-registry/docker/ontology/ontology-service-${{ inputs.ontology }} --limit 1 2>/dev/null | tail -n 1 | awk '{print $2}' | tr ',' '\n' | grep -v "latest" | grep -v "\." || echo "")
           echo "value=$EXISTING" >> $GITHUB_OUTPUT
 
-      - name: Compare and configure
+      - name: Compare sha for load
         id: compare
         run: |
           echo "value=${{steps.sha.outputs.value != steps.existing.outputs.value }}" >> "$GITHUB_OUTPUT"
+
   trigger_deploy:
     needs: watcher
     if: needs.watcher.outputs.deploy == 'true'
     uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-build-deploy.yml@main
     with:
         ontology: ${{ inputs.ontology }}
-        international: ${{ inputs.international }}
+        international: ${{needs.watcher.outputs.international}}
         load: ${{ inputs.load }}
-        tag: "${{needs.watcher.outputs.sha}}"
+        tag: ${{needs.watcher.outputs.sha}}
     secrets: inherit
