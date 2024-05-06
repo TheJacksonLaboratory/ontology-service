@@ -1,20 +1,19 @@
 name: Cron Ontology Service
-#on:
-#    schedule:
-#        - cron: "0 */4 * * *"
-on: workflow_dispatch
+on:
+    schedule:
+        - cron: "0 */4 * * *"
 jobs:
     ontologies:
         strategy:
             matrix:
                 include:
                     - ontology: "hp"
-#                    - ontology: "mondo"
-#                    - ontology: "maxo"
-#                    - ontology: "mp"
-#                    - ontology: "cl"
+                    - ontology: "mondo"
+                    - ontology: "maxo"
+                    - ontology: "mp"
+                    - ontology: "cl"
 
-        uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@feature/purl-impl
+        uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
         with:
             ontology: ${{ matrix.ontology }}
         secrets: inherit
