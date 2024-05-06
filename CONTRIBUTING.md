@@ -3,7 +3,8 @@
 ### Adding an ontology
 
 1. Add the metadata to `config/ontologies.json`
-2. Update the matrix in the `.github/ontology-cron.yml` (This will eventually be moved to another place.)
+2. Update the matrix in the `.github/ontology-cron.yml`
+3. Update `ontology.sh` for the new prefix
 
 ### Adding a language
 
