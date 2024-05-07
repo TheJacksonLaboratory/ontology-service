@@ -75,7 +75,7 @@ jobs:
     uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-build-deploy.yml@main
     with:
         ontology: ${{ inputs.ontology }}
-        international: ${{needs.watcher.outputs.international}}
+        international: ${{fromJSON(needs.watcher.outputs.international)}}
         load: ${{ inputs.load }}
         tag: ${{needs.watcher.outputs.sha}}
     secrets: inherit
