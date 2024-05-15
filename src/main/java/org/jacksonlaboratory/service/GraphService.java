@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,7 +75,7 @@ public class GraphService {
 			if (international){
 				termList = addTranslations(termList);
 			}
-			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
+			return termList.stream().map(SimpleOntologyTerm::new).sorted(Comparator.comparing(SimpleOntologyTerm::getName)).collect(Collectors.toList());
 		}
 	}
 

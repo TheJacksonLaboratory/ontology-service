@@ -38,17 +38,28 @@ class GraphServiceSpec extends Specification {
         when:
             def terms = graphService.getParents(TermId.of("HP:0000004"))
         then:
-            1 * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm()];
+            1 * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).setName("Test term").createOntologyTerm()];
             terms.size() == 1
     }
 
-    void 'test graph service get children'() {
+    void 'test graph service get children none'() {
         when:
-        def terms = graphService.getChildren(TermId.of("HP:0000004"))
+        def terms = graphService.getChildren(TermId.of("HP:0000001"))
         then:
-        1 * termRepository.findByTermIdIn(_) >> [];
+        1 * termRepository.findByTermIdIn(_) >> []
         terms.size() == 0
     }
+
+    void 'test graph service get children some'() {
+        when:
+        def terms = graphService.getChildren(TermId.of("HP:0000001"))
+        then:
+        _ * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000002")).setName("Zero Term").createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).setName("Beta Term").createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).setName("Sigma Term").createOntologyTerm()];
+        terms.size() == 3
+        terms.get(0).getName() == "Beta Term"
+        terms.get(1).getName() == "Sigma Term"
+    }
+
 
     void 'test graph service descendant count'() {
         when:
@@ -61,7 +72,7 @@ class GraphServiceSpec extends Specification {
         when:
         def terms = graphService.getDescendants(TermId.of("HP:0000001"))
         then:
-        1 * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).createOntologyTerm()];
+        _ * termRepository.findByTermIdIn(_) >> [new OntologyTermBuilder().setId(TermId.of("HP:000001")).setName("Alpha term").createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000002")).setName("Beta term").createOntologyTerm(), new OntologyTermBuilder().setId(TermId.of("HP:000003")).setName("Zeta term").createOntologyTerm()];
         terms.size() == 3
     }
 
@@ -85,7 +96,7 @@ class GraphServiceSpec extends Specification {
         u.get(0).getTranslations().size() == 1
         u.get(0).getTranslations()[0].name == "Bad things"
         where:
-        l = [new OntologyTermBuilder().setId(TermId.of("HP:000001")).createOntologyTerm()]
+        l = [new OntologyTermBuilder().setId(TermId.of("HP:000001")).setName("Basic Term").createOntologyTerm()]
     }
 
 

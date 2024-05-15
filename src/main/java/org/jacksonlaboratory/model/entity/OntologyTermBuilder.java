@@ -3,6 +3,7 @@ package org.jacksonlaboratory.model.entity;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OntologyTermBuilder {
 	private TermId id;
@@ -55,6 +56,8 @@ public class OntologyTermBuilder {
 	}
 
 	public OntologyTerm createOntologyTerm() {
+		Objects.requireNonNull(id, "id for ontology term cannot be null!");
+		Objects.requireNonNull(name, "name for ontology term cannot be null!");
 		return new OntologyTerm(id, name, definition, comment, synonyms, xrefs, nDescendants, translations);
 	}
 

@@ -48,7 +48,7 @@ class TermServiceSpec extends Specification {
         }
         where:
         id | termResponse | translationResponse | expected
-        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).createOntologyTerm()) | [] | true
+        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).setName("Big Term").createOntologyTerm()) | [] | true
         TermId.of("HP:00001") | Optional.empty() |[] | false
     }
 
@@ -65,7 +65,7 @@ class TermServiceSpec extends Specification {
         response.get().getTranslations()[0].name == "Bad things"
         where:
         id | termResponse | translationResponse
-        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).createOntologyTerm()) | [new Translation(termResponse.get(), Language.EN, "Bad things", "", TranslationStatus.OFFICIAL)]
+        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).setName("Fake Term").createOntologyTerm()) | [new Translation(termResponse.get(), Language.EN, "Bad things", "", TranslationStatus.OFFICIAL)]
     }
 
     def getSearchResponse(sorted) {
