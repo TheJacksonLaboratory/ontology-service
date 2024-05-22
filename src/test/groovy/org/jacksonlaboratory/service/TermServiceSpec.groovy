@@ -48,7 +48,7 @@ class TermServiceSpec extends Specification {
         }
         where:
         id | termResponse | translationResponse | expected
-        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).createOntologyTerm()) | [] | true
+        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder(id, "Big Term").createOntologyTerm()) | [] | true
         TermId.of("HP:00001") | Optional.empty() |[] | false
     }
 
@@ -65,21 +65,21 @@ class TermServiceSpec extends Specification {
         response.get().getTranslations()[0].name == "Bad things"
         where:
         id | termResponse | translationResponse
-        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder().setId(id).createOntologyTerm()) | [new Translation(termResponse.get(), Language.EN, "Bad things", "", TranslationStatus.OFFICIAL)]
+        TermId.of("HP:00001") | Optional.of(new OntologyTermBuilder(id,"Fake Term").createOntologyTerm()) | [new Translation(termResponse.get(), Language.EN, "Bad things", "", TranslationStatus.OFFICIAL)]
     }
 
     def getSearchResponse(sorted) {
         if(sorted){
             return [
-                    new OntologyTermBuilder().setId(TermId.of("HP:000001")).setName("Arachnodactyly").createOntologyTerm(),
-                    new OntologyTermBuilder().setId(TermId.of("HP:000002")).setName("Insane Arachnodactyly").createOntologyTerm(),
-                    new OntologyTermBuilder().setId(TermId.of("HP:000003")).setName("Some other term").createOntologyTerm()
+                    new OntologyTermBuilder(TermId.of("HP:000001"), "Arachnodactyly").createOntologyTerm(),
+                    new OntologyTermBuilder(TermId.of("HP:000002"),"Insane Arachnodactyly").createOntologyTerm(),
+                    new OntologyTermBuilder(TermId.of("HP:000003"),"Some other term").createOntologyTerm()
             ]
         }
         return [
-                new OntologyTermBuilder().setId(TermId.of("HP:000003")).setName("Some other term").createOntologyTerm(),
-                new OntologyTermBuilder().setId(TermId.of("HP:000002")).setName("Insane Arachnodactyly").createOntologyTerm(),
-                new OntologyTermBuilder().setId(TermId.of("HP:000001")).setName("Arachnodactyly").createOntologyTerm()
+                new OntologyTermBuilder(TermId.of("HP:000003"),"Some other term").createOntologyTerm(),
+                new OntologyTermBuilder(TermId.of("HP:000002"),"Insane Arachnodactyly").createOntologyTerm(),
+                new OntologyTermBuilder(TermId.of("HP:000001"),"Arachnodactyly").createOntologyTerm()
         ]
     }
 

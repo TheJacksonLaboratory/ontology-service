@@ -9,7 +9,6 @@ import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class TermService {
 			if (international){
 				List<Translation> translations = this.translationRepository.findAllByTerm(term);
 				if (translations != null && !translations.isEmpty()){
-					return Optional.of(new OntologyTermBuilder().fromOntologyTerm(term)
+					return Optional.of(new OntologyTermBuilder(term.getTermId(), term.getName()).extendFromOntologyTerm(term)
 							.setTranslations(translations).createOntologyTerm());
 				}
 				return Optional.of(term);

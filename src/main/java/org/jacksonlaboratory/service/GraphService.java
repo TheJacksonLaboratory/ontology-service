@@ -1,8 +1,6 @@
 package org.jacksonlaboratory.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.micronaut.context.annotation.Property;
-import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import org.jacksonlaboratory.ingest.OntologyDataResolver;
@@ -12,7 +10,6 @@ import org.jacksonlaboratory.model.entity.OntologyTermBuilder;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.MinimalOntologyLoader;
-import org.monarchinitiative.phenol.io.OntologyLoader;
 import org.monarchinitiative.phenol.ontology.data.MinimalOntology;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
@@ -23,6 +20,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,13 +72,13 @@ public class GraphService {
 			if (international){
 				termList = addTranslations(termList);
 			}
-			return termList.stream().map(SimpleOntologyTerm::new).collect(Collectors.toList());
+			return termList.stream().map(SimpleOntologyTerm::new).sorted(Comparator.comparing(SimpleOntologyTerm::getName)).collect(Collectors.toList());
 		}
 	}
 
 	List<OntologyTerm> addTranslations(List<OntologyTerm> terms){
 		return terms.stream().map(term ->
-				new OntologyTermBuilder().fromOntologyTerm(term)
+				new OntologyTermBuilder(term.getTermId(), term.getName()).extendFromOntologyTerm(term)
 						.setTranslations(this.translationRepository.findAllByTerm(term)).createOntologyTerm()
 		).collect(Collectors.toList());
 	}

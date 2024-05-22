@@ -3,6 +3,7 @@ package org.jacksonlaboratory.model.entity;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OntologyTermBuilder {
 	private TermId id;
@@ -13,6 +14,11 @@ public class OntologyTermBuilder {
 	private String xrefs;
 	private int nDescendants;
 	private List<Translation> translations;
+
+	public OntologyTermBuilder(TermId id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public OntologyTermBuilder setId(TermId id) {
 		this.id = id;
@@ -55,12 +61,12 @@ public class OntologyTermBuilder {
 	}
 
 	public OntologyTerm createOntologyTerm() {
+		Objects.requireNonNull(id, "id for ontology term cannot be null!");
+		Objects.requireNonNull(name, "name for ontology term cannot be null!");
 		return new OntologyTerm(id, name, definition, comment, synonyms, xrefs, nDescendants, translations);
 	}
 
-	public OntologyTermBuilder fromOntologyTerm(OntologyTerm term) {
-		this.id = term.getTermId();
-		this.name = term.getName();
+	public OntologyTermBuilder extendFromOntologyTerm(OntologyTerm term) {
 		this.definition = term.getDefinition();
 		this.comment = term.getComment();
 		this.synonyms = String.join(";", term.getSynonyms());

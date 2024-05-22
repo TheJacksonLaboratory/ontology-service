@@ -70,8 +70,8 @@ public class TermRepositoryImpl implements TermRepository {
 				.createNativeQuery("SELECT t.* FROM ONTOLOGY_TERM t WHERE t.id like :param1")
 				.setParameter("param1", partial + "%").getResultStream();
 		return result.map(row ->
-				new OntologyTermBuilder().setDescendantCount((int) row[0]).setId(TermId.of((String) row[4]))
-						.setName((String) row[5]).setDefinition((String) row[2]).setComment("").setXrefs((String) row[7]).createOntologyTerm()
+				new OntologyTermBuilder(TermId.of((String) row[4]),(String) row[5]).setDescendantCount((int) row[0])
+						.setDefinition((String) row[2]).setComment("").setXrefs((String) row[7]).createOntologyTerm()
 		);
 	}
 
