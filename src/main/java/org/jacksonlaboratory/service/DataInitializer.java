@@ -58,7 +58,7 @@ public class DataInitializer {
 			try {
 				this.termRepository.configure();
 				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct().map(term ->
-					 new OntologyTermBuilder().setId(term.id()).setName(term.getName())
+					 new OntologyTermBuilder(term.id(), term.getName())
 							.setDefinition(term.getDefinition()).setComment(term.getComment())
 							.setSynonyms( term.getSynonyms().stream()
 									.filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(";")))
