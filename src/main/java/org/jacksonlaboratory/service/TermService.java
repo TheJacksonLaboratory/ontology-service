@@ -60,19 +60,49 @@ public class TermService {
 					}).collect(Collectors.toList());
 		}
 		return this.termRepository.search(q, false).stream().sorted((a, b) -> {
-				boolean  aStarts = a.getName().toLowerCase().startsWith(q);
-				boolean  bStarts = b.getName().toLowerCase().startsWith(q);
+			// Bring synonym matches to the top
+			boolean  aStarts = a.getSynonyms().stream().anyMatch(s -> s.toLowerCase().startsWith(q.toLowerCase()));
+			boolean  bStarts = b.getSynonyms().stream().anyMatch(s -> s.toLowerCase().startsWith(q.toLowerCase()));
 
-				// Sort objects based on whether the name starts with the prefix
-				if (aStarts && !bStarts) {
-					return -1; // o1 comes before o2
-				} else if (!aStarts && bStarts) {
-					return 1; // o2 comes before o1
-				} else {
-					boolean  aContains = a.getName().toLowerCase().contains(q);
-					boolean  bContains = b.getName().toLowerCase().contains(q);
-					return aContains && !bContains ? -1 : !aContains && bContains ? 1 : 0;
-				}
-			}).collect(Collectors.toList());
+			if (aStarts && !bStarts) {
+				return -1;
+			} else if (!aStarts && bStarts) {
+				return 1;
+			}
+			return 0;
+		}).sorted((a, b) -> {
+			// Bring synonym matches to the top
+			boolean  aStarts = a.getName().toLowerCase().contains(q.toLowerCase());
+			boolean  bStarts = b.getName().toLowerCase().contains(q.toLowerCase());
+
+			if (aStarts && !bStarts) {
+				return -1;
+			} else if (!aStarts && bStarts) {
+				return 1;
+			}
+			return 0;
+		}).sorted((a, b) -> {
+			// Then bring synonym matches to the top
+			boolean  aStarts = a.getName().toLowerCase().startsWith(q.toLowerCase());
+			boolean  bStarts = b.getName().toLowerCase().startsWith(q.toLowerCase());
+
+			if (aStarts && !bStarts) {
+				return -1;
+			} else if (!aStarts && bStarts) {
+				return 1;
+			}
+			return 0;
+		}).sorted((a, b) -> {
+			// Then bring exact matches to the top
+			boolean  aStarts = a.getName().toLowerCase().equalsIgnoreCase(q);
+			boolean  bStarts = b.getName().toLowerCase().equalsIgnoreCase(q);
+
+			if (aStarts && !bStarts) {
+				return -1;
+			} else if (!aStarts && bStarts) {
+				return 1;
+			}
+			return 0;
+		}).collect(Collectors.toList());
 	}
 }
