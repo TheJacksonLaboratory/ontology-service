@@ -2,6 +2,7 @@ micronaut:
   server:
     cors:
       enabled: true
+    port: 8081
   application:
     name: ontology-service-${ONTOLOGY_SERVICE_ONTOLOGY:unknown}
   router:
@@ -17,7 +18,7 @@ micronaut:
       inclusion: ALWAYS
 endpoints:
   all:
-    path: /${api-url.prefix}/${ontology}/
+    path: /${api-url.prefix}/${ontology}/monitor/
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
