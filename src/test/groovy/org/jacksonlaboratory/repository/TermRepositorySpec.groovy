@@ -51,5 +51,7 @@ class TermRepositorySpec extends Specification {
         t | prefixSearch | expectedSize
         "HP:00000" | true | 5
         "test" | false | 1
+        "" | false | 0
+        "test " | false | 1
     }
 }
