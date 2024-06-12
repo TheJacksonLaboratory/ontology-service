@@ -1,6 +1,7 @@
 package org.jacksonlaboratory.repository;
 
 import io.micronaut.context.annotation.Property;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.transaction.annotation.ReadOnly;
 import jakarta.inject.Singleton;
 import jakarta.persistence.EntityManager;
@@ -53,12 +54,17 @@ public class TermRepositoryImpl implements TermRepository {
 	 */
 	@Override
 	@Transactional
-	public List<OntologyTerm> search(String searchTerm, boolean prefixSearch) {
+	public List<OntologyTerm> search(@NonNull String searchTerm, boolean prefixSearch) {
+
+		if (searchTerm.trim().isEmpty()){
+			return Collections.emptyList();
+		}
+
 		if (prefixSearch){
-			return searchPartialId(searchTerm).collect(Collectors.toList());
+			return searchPartialId(searchTerm.trim()).collect(Collectors.toList());
 		} else {
 			TypedQuery<OntologyTerm> sp = entityManager.createNamedQuery("searchQuery", OntologyTerm.class);
-			sp.setParameter("param1", String.format("%s*", searchTerm));
+			sp.setParameter("param1", String.format("%s*", searchTerm.trim()));
 			return sp.getResultStream().collect(Collectors.toList());
 
 		}
