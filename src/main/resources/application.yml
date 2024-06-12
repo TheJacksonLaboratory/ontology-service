@@ -2,7 +2,6 @@ micronaut:
   server:
     cors:
       enabled: true
-    port: 8081
   application:
     name: ontology-service-${ONTOLOGY_SERVICE_ONTOLOGY:unknown}
   router:
