@@ -53,5 +53,6 @@ class TermRepositorySpec extends Specification {
         "test" | false | 1
         "" | false | 0
         "test " | false | 1
+        "" | true | 0
     }
 }
