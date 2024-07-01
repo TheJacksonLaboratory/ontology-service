@@ -38,13 +38,13 @@ dependencies {
     compileOnly("io.swagger.core.v3:swagger-annotations")
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut.validation:micronaut-validation:4.0.3")
-    implementation("org.monarchinitiative.phenol:phenol-core:2.0.2"){
+    implementation("org.monarchinitiative.phenol:phenol-core:2.1.1"){
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    implementation("org.monarchinitiative.phenol:phenol-io:2.0.2"){
+    implementation("org.monarchinitiative.phenol:phenol-io:2.1.1"){
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
-    implementation("org.monarchinitiative.phenol:phenol-annotations:2.0.2"){
+    implementation("org.monarchinitiative.phenol:phenol-annotations:2.1.1"){
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
 
