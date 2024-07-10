@@ -55,7 +55,7 @@ jobs:
       - name: Generate sha1 from purl file
         id: sha
         run: |
-          SHA=$(curl ${{ steps.purl.outputs.value }} | shasum | cut -c -7)
+          SHA=$(curl -L ${{ steps.purl.outputs.value }} | shasum | cut -c -7)
           echo "value=$SHA" >> $GITHUB_OUTPUT
 
       - name: Get existing sha from service
