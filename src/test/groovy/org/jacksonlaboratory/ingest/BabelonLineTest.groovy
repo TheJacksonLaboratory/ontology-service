@@ -29,6 +29,6 @@ class BabelonLineTest extends Specification {
     }
 
     def testBabelonLine(){
-        return "en\tnl\tHP:0000005\trdfs:label\tMode of inheritance\tOverervingspatroon\tCANDIDATE"
+        return "en\tMode of inheritance\tHP:0000005\trdfs:label\tnl\tOverervingspatroon\tCANDIDATE\t\t\t\t\t\t\t\t\t"
     }
 }
