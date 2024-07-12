@@ -6,6 +6,7 @@ import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
