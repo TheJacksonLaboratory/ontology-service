@@ -1,5 +1,5 @@
-source_language	translation_language	subject_id	predicate_id	source_value	translation_value	translation_status
-en	nl	HP:0000001	rdfs:label	All	Alle	CANDIDATE
-en	nl	HP:0000002	rdfs:label	Abnormality of body height	Afwijking van de lichaamslengte	CANDIDATE
-en	nl	HP:0000002	IAO:0000115	Deviation from the norm of height with respect to that which is expected according to age and gender norms	Afwijking van de norm van hoogte met betrekking tot wat de verwachting is volgens leeftijds en geslachtsnormen	CANDIDATE
-en	nl	HP:0000003	rdfs:label	Multicystic kidney dysplasia	Multicysteuze nierdysplasie	CANDIDATE
+source_language	source_value	subject_id	predicate_id	translation_language	translation_value	translation_status	translator	translator_expertise	comment	translation_date	source	source_version	translation_confidence	translation_precision	translation_type
+en	All	HP:0000001	rdfs:label	nl	Alle	CANDIDATE
+en	Abnormality of body height	HP:0000002	rdfs:label	nl	Afwijking van de lichaamslengte	CANDIDATE
+en	Deviation from the norm of height with respect to that which is expected according to age and gender norms.	HP:0000002	IAO:0000115	nl	Afwijking van de norm van hoogte met betrekking tot wat de verwachting is volgens leeftijds en geslachtsnormen	CANDIDATE
+en	Multicystic kidney dysplasia	HP:0000003	rdfs:label	nl	Multicysteuze nierdysplasie	CANDIDATE									

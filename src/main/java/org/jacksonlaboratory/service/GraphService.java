@@ -19,9 +19,7 @@ import jakarta.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,25 +48,25 @@ public class GraphService {
 	}
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
-		List<TermId> termIdList = this.ontology.graph().getParentsStream(termId, false).collect(Collectors.toList());
+		Collection<TermId> termIdList = this.ontology.graph().extendWithParents(termId, false);
 		return unpack(termIdList);
 	}
 
 	public List<SimpleOntologyTerm> getChildren(TermId termId) {
-		List<TermId> termIdList = this.ontology.graph().getChildrenStream(termId, false).collect(Collectors.toList());
+		Collection<TermId> termIdList = this.ontology.graph().extendWithChildren(termId, false);
 		return unpack(termIdList);
 	}
 
 	public List<SimpleOntologyTerm> getDescendants(TermId termId){
-		List<TermId> termIdList = this.ontology.graph().getDescendantsStream(termId, false).collect(Collectors.toList());
+		Collection<TermId> termIdList = this.ontology.graph().extendWithDescendants(termId, false);
 		return unpack(termIdList);
 	}
 
-	List<SimpleOntologyTerm> unpack(List<TermId> termIdList){
+	List<SimpleOntologyTerm> unpack(Collection<TermId> termIdList){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
-			List<OntologyTerm> termList = this.termRepository.findByTermIdIn(termIdList);
+			Collection<OntologyTerm> termList = this.termRepository.findByTermIdIn(new ArrayList<>(termIdList));
 			if (international){
 				termList = addTranslations(termList);
 			}
@@ -76,7 +74,7 @@ public class GraphService {
 		}
 	}
 
-	List<OntologyTerm> addTranslations(List<OntologyTerm> terms){
+	List<OntologyTerm> addTranslations(Collection<OntologyTerm> terms){
 		return terms.stream().map(term ->
 				new OntologyTermBuilder(term.getTermId(), term.getName()).extendFromOntologyTerm(term)
 						.setTranslations(this.translationRepository.findAllByTerm(term)).createOntologyTerm()
@@ -85,7 +83,7 @@ public class GraphService {
 
 	@JsonIgnore
 	public int getDescendantCount(TermId termId){
-		return (int) this.ontology.graph().getDescendantsStream(termId, false).count();
+		return this.ontology.graph().extendWithDescendants(termId, false).size();
 	}
 
 	public MinimalOntology getOntology() {

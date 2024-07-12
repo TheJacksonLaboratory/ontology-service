@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.info.*;
     info = @Info(
             title = "ontology-service-${ontology}",
             description = "A restful service for the ${ontology} ontology.",
-            version = "0.5.14",
+            version = "0.5.15",
             contact = @Contact(name = "Michael Gargano", email = "Michael.Gargano@jax.org")
     )
 )

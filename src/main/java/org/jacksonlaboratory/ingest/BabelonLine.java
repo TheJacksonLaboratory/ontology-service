@@ -38,10 +38,10 @@ public class BabelonLine {
 		try {
 			String[] fields = line.split("\t");
 			Language source_language = Language.valueOf(fields[0].toUpperCase());
-			Language translation_language = Language.valueOf(fields[1].toUpperCase());
+			Language translation_language = Language.valueOf(fields[4].toUpperCase());
 			TermId id = TermId.of(fields[2]);
 			PredicateType predicate_type = PredicateType.fromTermId(TermId.of(fields[3]));
-			String source_text = fields[4].trim();
+			String source_text = fields[1].trim();
 			String translation_text = fields[5].trim();
 			TranslationStatus translationStatus = TranslationStatus.valueOf(fields[6].toUpperCase());
 			return of(source_language, translation_language, id, predicate_type, source_text, translation_text, translationStatus);
