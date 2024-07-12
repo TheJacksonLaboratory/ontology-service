@@ -1,7 +1,8 @@
 name: Cron Ontology Service
 on:
     schedule:
-        - cron: "0 */4 * * *"
+        - cron: '0 */4 * * *'
+    workflow_dispatch:
 jobs:
     ontologies:
         strategy:
@@ -12,7 +13,7 @@ jobs:
                     - ontology: "maxo"
                     - ontology: "mp"
                     - ontology: "cl"
-
+            fail-fast: false
         uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
         with:
             ontology: ${{ matrix.ontology }}

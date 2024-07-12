@@ -68,6 +68,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 17
+          distribution: 'zulu'
 
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
