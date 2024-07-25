@@ -33,6 +33,12 @@ class GraphServiceSpec extends Specification {
         ontology.getTerms().size() == 5
     }
 
+    void 'test graph service get most recent termid'() {
+        when:
+        def term = graphService.getMostRecentTermId(TermId.of("HP:0001523"))
+        then:
+        term.get() == TermId.of("HP:0000005")
+    }
 
     void 'test graph service get parents'() {
         when:

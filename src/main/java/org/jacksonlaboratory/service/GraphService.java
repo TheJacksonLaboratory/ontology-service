@@ -10,7 +10,9 @@ import org.jacksonlaboratory.model.entity.OntologyTermBuilder;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.MinimalOntologyLoader;
+import org.monarchinitiative.phenol.ontology.data.Identified;
 import org.monarchinitiative.phenol.ontology.data.MinimalOntology;
+import org.monarchinitiative.phenol.ontology.data.Term;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,12 @@ public class GraphService {
 		this.termRepository = termRepository;
 		this.translationRepository = translationRepository;
 	}
+
+	public Optional<TermId> getMostRecentTermId(TermId termId){
+		Optional<Term> term = this.ontology.termForTermId(termId);
+		return term.map(Identified::id);
+	}
+
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		Collection<TermId> termIdList = this.ontology.graph().extendWithParents(termId, false);
