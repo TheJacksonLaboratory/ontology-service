@@ -127,7 +127,10 @@
         }, {
           "pred" : "http://www.geneontology.org/formats/oboInOwl#created_by",
           "val" : "peter"
-        } ]
+        }, {
+          "pred" : "http://www.geneontology.org/formats/oboInOwl#hasAlternativeId",
+          "val" : "HP:0001523"
+        }]
       },
       "type" : "CLASS",
       "lbl" : "Fake term 5"

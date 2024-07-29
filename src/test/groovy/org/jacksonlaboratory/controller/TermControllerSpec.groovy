@@ -47,6 +47,7 @@ class TermControllerSpec extends Specification {
         def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q), Map.class)
         then:
         1 * termService.getOntologyTermByTermId(TermId.of(q)) >> res
+        1 * graphService.getMostRecentTermId((TermId.of(q))) >> Optional.empty()
         response.body().get("id") == "HP:000003"
         response.body().get("name") == "fake name"
         response.body().get("definition") == "fake def"

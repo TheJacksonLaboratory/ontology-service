@@ -40,8 +40,18 @@ public class TermController {
     @Get(uri="/{id}", produces="application/json")
     public HttpResponse<?> details(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id) {
         TermId termId = TermId.of(id);
+        Optional<TermId> replacement = this.graphService.getMostRecentTermId(termId);
+
+        if (replacement.isPresent()){
+            termId = replacement.get();
+        }
+
         Optional<OntologyTerm> term = this.termService.getOntologyTermByTermId(termId);
-        return HttpResponse.ok(term.orElse(null));
+        if (term.isEmpty()){
+            return HttpResponse.notFound();
+        } else {
+            return HttpResponse.ok(term.get());
+        }
     }
 
     /**
