@@ -62,6 +62,11 @@ public class GraphService {
 		return unpack(termIdList);
 	}
 
+	public List<SimpleOntologyTerm> getAncestors(TermId termId){
+		Collection<TermId> termIdList = this.ontology.graph().extendWithAncestors(termId, false);
+		return unpack(termIdList);
+	}
+
 	List<SimpleOntologyTerm> unpack(Collection<TermId> termIdList){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
