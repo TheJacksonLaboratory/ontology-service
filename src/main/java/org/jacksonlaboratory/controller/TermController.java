@@ -80,7 +80,7 @@ public class TermController {
     /**
      * Get the ancestors of the ontology id
      * @param id The ontology term id
-     * @return The descendants of the term id
+     * @return The ancestors of the term id
      */
     @Get(uri="/{id}/ancestors", produces="application/json")
     public List<SimpleOntologyTerm> ancestors(@Schema(minLength = 1, maxLength = 20, type = "string", pattern = ".*") @PathVariable String id){
