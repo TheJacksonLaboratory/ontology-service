@@ -30,7 +30,7 @@ class GraphServiceSpec extends Specification {
         when:
         def ontology = graphService.getOntology()
         then:
-        ontology.getTerms().size() == 5
+        ontology.getTerms().size() == 6
     }
 
     void 'test graph service get most recent termid'() {
