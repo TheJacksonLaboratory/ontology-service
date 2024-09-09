@@ -10,6 +10,9 @@ import org.jacksonlaboratory.model.entity.OntologyTermBuilder;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.io.MinimalOntologyLoader;
+import org.monarchinitiative.phenol.io.OntologyLoader;
+import org.monarchinitiative.phenol.io.OntologyLoaderOptions;
+import org.monarchinitiative.phenol.io.utils.CurieUtilBuilder;
 import org.monarchinitiative.phenol.ontology.data.Identified;
 import org.monarchinitiative.phenol.ontology.data.MinimalOntology;
 import org.monarchinitiative.phenol.ontology.data.Term;
@@ -112,7 +115,7 @@ public class GraphService {
 		log.info(String.format("Loading %s ontology json..", ontologyName));
 		this.dataResolver = OntologyDataResolver.of(Path.of(directory), this.ontologyName);
 		File file = new File(dataResolver.ontologyJson().toUri());
-		this.ontology = MinimalOntologyLoader.loadOntology(file, ontologyName.toUpperCase());
+		this.ontology = OntologyLoader.loadOntology(file, ontologyName.toUpperCase());
 		log.info("Finished loading ontology json.");
 	}
 }

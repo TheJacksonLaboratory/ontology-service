@@ -57,7 +57,8 @@ public class DataInitializer {
 			log.info(String.format("Loading %s ontology terms..", graphService.ontologyName));
 			try {
 				this.termRepository.configure();
-				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct().map(term ->
+				List<OntologyTerm> terms = graphService.getOntology().getTerms().stream().distinct()
+						.filter(Predicate.not(term -> !term.id().getPrefix().toLowerCase().contains(graphService.ontologyName))).map(term ->
 					 new OntologyTermBuilder(term.id(), term.getName())
 							.setDefinition(term.getDefinition()).setComment(term.getComment())
 							.setSynonyms( term.getSynonyms().stream()
