@@ -36,3 +36,5 @@ Java 17
    ```docker run ontology-service:<version> -p 8080:8080```
 5. Open http://localhost:8080/api/hp/docs
 
+## Deployment
+These services auto deploy based on the hashed value of the ontology file. The hash value is then stored as a tag on the docker container, when the two hashes do not align we auto-deploy the new "updated" ontology. The only time we need to manually deploy is when we add a new ontology.
