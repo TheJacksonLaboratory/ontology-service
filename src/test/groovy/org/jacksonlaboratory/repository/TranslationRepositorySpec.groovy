@@ -24,7 +24,7 @@ class TranslationRepositorySpec extends  Specification {
 
     void "test find all by term"() {
         when:
-            def term = termService.getAllOntologyTerms().find {it -> it.id == "HP:0000002"}.collect()
+            def term = termService.getAllOntologyTerms([]).find {it -> it.id == "HP:0000002"}.collect()
             def res = translationRepository.findAllByTerm(term[0])
         then:
         res.size() == 1

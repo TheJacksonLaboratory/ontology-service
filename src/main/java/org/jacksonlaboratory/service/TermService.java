@@ -46,8 +46,11 @@ public class TermService {
 		return Optional.empty();
 	}
 
-	public List<OntologyTerm> getAllOntologyTerms(){
-		return this.termRepository.findAll();
+	public List<OntologyTerm> getAllOntologyTerms(List<TermId> termIdList){
+		if (termIdList.isEmpty()){
+			return this.termRepository.findAll();
+		}
+		return this.termRepository.findByTermIdIn(termIdList);
 	}
 
 	public List<OntologyTerm> searchOntologyTerm(String q){
