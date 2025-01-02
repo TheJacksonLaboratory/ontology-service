@@ -35,7 +35,7 @@ class TermControllerSpec extends Specification {
         when:
         def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/'), Argument.listOf(Map.class))
         then:
-        1 * termService.getAllOntologyTerms() >> res
+        1 * termService.getAllOntologyTerms(List.of()) >> res
         response.body().size() == res.size()
         response.status().getCode().toInteger() == 200
         where:

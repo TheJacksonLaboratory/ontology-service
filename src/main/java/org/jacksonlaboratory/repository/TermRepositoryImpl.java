@@ -30,18 +30,21 @@ public class TermRepositoryImpl implements TermRepository {
 
 	@Override
 	@ReadOnly
+	@Transactional
 	public List<OntologyTerm> findAll(){
 		return entityManager.createQuery("SELECT t FROM OntologyTerm t", OntologyTerm.class).getResultStream().collect(Collectors.toList());
 	}
 
 	@Override
 	@ReadOnly
+	@Transactional
 	public Optional<OntologyTerm> findByTermId(TermId id) {
 		Optional<OntologyTerm> term = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id = :param1", OntologyTerm.class).setParameter("param1", id).getResultStream().findFirst();
 		return term;
 	}
 
 	@Override
+	@Transactional
 	public List<OntologyTerm> findByTermIdIn(List<TermId> ids) {
 		List<OntologyTerm> terms = entityManager.createQuery("SELECT t FROM OntologyTerm t WHERE t.id in :param1", OntologyTerm.class).setParameter("param1", ids).getResultList();
 		terms.sort(Comparator.comparing(item -> ids.indexOf(TermId.of(item.getId()))));
