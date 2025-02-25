@@ -110,3 +110,8 @@ jobs:
           echo "Invoke endpoint:"
           gcloud run services list --platform managed --format json | jq -r \
             '.[] | select(.metadata.name == "google-cloud-run-maven-test") | .status.address.url'
+                - name: Deploy Cloud Run
+      - name: Deploy Internal Cluster
+        run: |
+          echo "{"builds":[{"imageName":"ontology-service-api","tag":"${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG""}]}" > build.json
+          skaffold deploy --profile=${BITBUCKET_DEPLOYMENT_ENVIRONMENT} --build-artifacts=build.json

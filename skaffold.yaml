@@ -1,0 +1,7 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: ontology-service
+build:
+  artifacts:
+    - image: your-docker-registry/ontology-service
