@@ -1,0 +1,17 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: global-labels
+labels:
+  jax.org/owner-team: jds
+  jax.org/owner-team-id: todo
+  jax.org/billing-group: jds
+  jax.org/system-group: jds
+  jax.org/component-id: fae71680-ddf9-4bc1-bda7-48bb527262f5
+  jax.org/component-tier: 1
+fieldSpecs:
+  - path: metadata/labels
+    create: true
+  - path: spec/template/metadata/labels
+    kind: Deployment
+    create: true

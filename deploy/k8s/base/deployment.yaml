@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ontology-service-api-hp
+  labels:
+    app: ontology-service-api-hp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ontology-service-api-hp
+  template:
+    metadata:
+      labels:
+        app: ontology-service-api-hp
+    spec:
+      containers:
+        - name: ontology-service-api-hp
+          image: ontology-service-api
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ontology-service-api-hp
+  labels:
+    app: ontology-service-api-hp
+spec:
+  type: ClusterIP
+  selector:
+    app: ontology-service-api-hp
+  ports:
+    - protocol: TCP
+      name: direct
+      port: 80
+      targetPort: 8080
