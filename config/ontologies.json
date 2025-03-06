@@ -9,7 +9,7 @@
     "home": "https://hpo.jax.org",
     "api": {
       "docs": "https://ontology.jax.org/api/hp/docs",
-      "base": "https://ontology.jax.org/api/hp/"
+      "base":  "https://ontology.jax.org/api/hp"
     },
     "base_file": "https://purl.obolibrary.org/obo/hp/hp-base.json",
     "international": true,
@@ -25,7 +25,7 @@
     "home": "https://github.com/monarch-initiative/MAxO",
     "api": {
       "docs": "https://ontology.jax.org/api/maxo/docs",
-      "base": "https://ontology.jax.org/api/maxo/"
+      "base": "https://ontology.jax.org/api/maxo"
     },
     "base_file": "https://purl.obolibrary.org/obo/maxo/maxo-base.json",
     "international": false,
@@ -36,12 +36,12 @@
     "prefix": "mondo",
     "github": {
       "api":  "https://api.github.com/repos/monarch-initiative/mondo",
-      "home": "https://github.com/monarch-initiative/mondo/"
+      "home": "https://github.com/monarch-initiative/mondo"
     },
     "home": "https://mondo.monarchinitiative.org/",
     "api": {
       "docs": "https://ontology.jax.org/api/mondo/docs",
-      "base": "https://ontology.jax.org/api/mondo/"
+      "base": "https://ontology.jax.org/api/mondo"
     },
     "base_file": "https://purl.obolibrary.org/obo/mondo/mondo-base.json",
     "international": false,
@@ -57,7 +57,7 @@
     "home": "https://www.informatics.jax.org/vocab/mp_ontology",
     "api": {
       "docs": "https://ontology.jax.org/api/mp/docs",
-      "base": "https://ontology.jax.org/api/mp/",
+      "base": "https://ontology.jax.org/api/mp"
     },
     "base_file": "https://purl.obolibrary.org/obo/mp/mp-base.json",
     "international": false,
@@ -73,7 +73,7 @@
     "home": "https://obophenotype.github.io/cell-ontology/",
     "api": {
       "docs": "https://ontology.jax.org/api/cl/docs",
-      "base": "https://ontology.jax.org/api/cl/"
+      "base": "https://ontology.jax.org/api/cl"
     },
     "base_file": "https://purl.obolibrary.org/obo/cl/cl-base.json",
     "international": false,
