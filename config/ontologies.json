@@ -7,7 +7,10 @@
       "home": "https://github.com/obophenotype/human-phenotype-ontology"
     },
     "home": "https://hpo.jax.org",
-    "api": "https://ontology.jax.org/api/hp/docs",
+    "api": {
+      "docs": "https://ontology.jax.org/api/hp/docs",
+      "base": "https://ontology.jax.org/api/hp/"
+    },
     "base_file": "https://purl.obolibrary.org/obo/hp/hp-base.json",
     "international": true,
     "description": "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease."
@@ -20,7 +23,10 @@
       "home": "https://github.com/monarch-initiative/MAxO"
     },
     "home": "https://github.com/monarch-initiative/MAxO",
-    "api": "https://ontology.jax.org/api/maxo/docs",
+    "api": {
+      "docs": "https://ontology.jax.org/api/maxo/docs",
+      "base": "https://ontology.jax.org/api/maxo/"
+    },
     "base_file": "https://purl.obolibrary.org/obo/maxo/maxo-base.json",
     "international": false,
     "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations."
@@ -30,10 +36,13 @@
     "prefix": "mondo",
     "github": {
       "api":  "https://api.github.com/repos/monarch-initiative/mondo",
-      "home": "https://github.com/monarch-initiative/mondo"
+      "home": "https://github.com/monarch-initiative/mondo/"
     },
     "home": "https://mondo.monarchinitiative.org/",
-    "api": "https://ontology.jax.org/api/mondo/docs",
+    "api": {
+      "docs": "https://ontology.jax.org/api/mondo/docs",
+      "base": "https://ontology.jax.org/api/mondo/"
+    },
     "base_file": "https://purl.obolibrary.org/obo/mondo/mondo-base.json",
     "international": false,
     "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'"
@@ -46,7 +55,10 @@
       "home": "https://github.com/mgijax/mammalian-phenotype-ontology"
     },
     "home": "https://www.informatics.jax.org/vocab/mp_ontology",
-    "api": "https://ontology.jax.org/api/mp/docs",
+    "api": {
+      "docs": "https://ontology.jax.org/api/mp/docs",
+      "base": "https://ontology.jax.org/api/mp/",
+    },
     "base_file": "https://purl.obolibrary.org/obo/mp/mp-base.json",
     "international": false,
     "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus."
@@ -59,7 +71,10 @@
       "home": "https://github.com/obophenotype/cell-ontology"
     },
     "home": "https://obophenotype.github.io/cell-ontology/",
-    "api": "https://ontology.jax.org/api/cl/docs",
+    "api": {
+      "docs": "https://ontology.jax.org/api/cl/docs",
+      "base": "https://ontology.jax.org/api/cl/"
+    },
     "base_file": "https://purl.obolibrary.org/obo/cl/cl-base.json",
     "international": false,
     "description": "The Cell Ontology (CL) is an OBO Foundry ontology covering the domain of canonical, natural biological cell types."
