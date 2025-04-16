@@ -9,10 +9,7 @@ jobs:
             matrix:
                 include:
                     - ontology: "hp"
-                    - ontology: "mondo"
-                    - ontology: "maxo"
                     - ontology: "mp"
-                    - ontology: "cl"
             fail-fast: false
         uses: TheJacksonLaboratory/ontology-service/.github/workflows/ontology-check-trigger.yml@main
         with:
