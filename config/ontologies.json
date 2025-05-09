@@ -30,5 +30,21 @@
     "base_file": "https://purl.obolibrary.org/obo/mp/mp-base.json",
     "international": false,
     "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus."
+  },
+  {
+    "name": "Mondo Disease Ontology",
+    "prefix": "mondo",
+    "github": {
+      "api":  "https://api.github.com/repos/monarch-initiative/mondo",
+      "home": "https://github.com/monarch-initiative/mondo"
+    },
+    "home": "https://mondo.monarchinitiative.org/",
+    "api": {
+      "docs": "https://ontology.jax.org/api/mondo/docs",
+      "base": "https://ontology.jax.org/api/mondo"
+    },
+    "base_file": "https://purl.obolibrary.org/obo/mondo/mondo-base.json",
+    "international": false,
+    "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'"
   }
 ]
