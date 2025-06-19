@@ -107,7 +107,7 @@ jobs:
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
             --memory 3Gi --cpu 2 --min-instances 1 --max-instances 5 --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
           echo "Migrating traffic:"
-          gcloud run services update-traffic $SERVICE_NAME --to-revisions LATEST=100
+          gcloud run services update-traffic $SERVICE_NAME --to-revisions LATEST=100 --region "${GLCOUD_REGION}"
           echo "Invoke endpoint:"
           gcloud run services list --platform managed --format json | jq -r \
             '.[] | select(.metadata.name == "google-cloud-run-maven-test") | .status.address.url'
