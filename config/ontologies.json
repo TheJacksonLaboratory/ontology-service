@@ -46,5 +46,21 @@
     "base_file": "https://purl.obolibrary.org/obo/mondo/mondo-base.json",
     "international": false,
     "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'"
+  },
+  {
+    "name": "Medical Action Ontology",
+    "prefix": "maxo",
+    "github": {
+      "api":  "https://api.github.com/repos/monarch-initiative/maxo",
+      "home": "https://github.com/monarch-initiative/MAxO"
+    },
+    "home": "https://github.com/monarch-initiative/MAxO",
+    "api": {
+      "docs": "https://ontology.jax.org/api/maxo/docs",
+      "base": "https://ontology.jax.org/api/maxo"
+    },
+    "base_file": "https://purl.obolibrary.org/obo/maxo/maxo-base.json",
+    "international": false,
+    "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations."
   }
 ]
