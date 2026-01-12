@@ -102,10 +102,23 @@ jobs:
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
           DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" "${DOCKER_IMAGE_REPOSITORY}" )
 
+          # HP-specific deployment configuration (most used ontology)
+          if [ "$ONTOLOGY_SERVICE_ONTOLOGY" == "hp" ]; then
+            MEMORY="3Gi"
+            CPU="2"
+            MIN_INSTANCES="1"
+            MAX_INSTANCES="5"
+          else
+            MEMORY="2Gi"
+            CPU="1"
+            MIN_INSTANCES="0"
+            MAX_INSTANCES="2"
+          fi
+
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
-            --memory 3Gi --cpu 2 --min-instances 1 --max-instances 5 --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+            --memory $MEMORY --cpu $CPU --min-instances $MIN_INSTANCES --max-instances $MAX_INSTANCES --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
           echo "Migrating traffic:"
           gcloud run services update-traffic $SERVICE_NAME --to-revisions LATEST=100 --region "${GCLOUD_REGION}"
           echo "Invoke endpoint:"
