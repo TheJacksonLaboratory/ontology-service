@@ -13,7 +13,13 @@
     },
     "base_file": "https://purl.obolibrary.org/obo/hp/hp-base.json",
     "international": true,
-    "description": "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease."
+    "description": "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease.",
+    "deployment": {
+      "memory": "3Gi",
+      "cpu": 2,
+      "min_instances": 1,
+      "max_instances": 5
+    }
   },
   {
     "name": "Mammalian Phenotype Ontology",
@@ -29,7 +35,13 @@
     },
     "base_file": "https://purl.obolibrary.org/obo/mp/mp-base.json",
     "international": false,
-    "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus."
+    "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus.",
+    "deployment": {
+      "memory": "2Gi",
+      "cpu": 1,
+      "min_instances": 0,
+      "max_instances": 2
+    }
   },
   {
     "name": "Mondo Disease Ontology",
@@ -45,7 +57,13 @@
     },
     "base_file": "https://purl.obolibrary.org/obo/mondo/mondo-base.json",
     "international": false,
-    "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'"
+    "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'",
+    "deployment": {
+      "memory": "2Gi",
+      "cpu": 2,
+      "min_instances": 1,
+      "max_instances": 4
+    }
   },
   {
     "name": "Medical Action Ontology",
@@ -61,6 +79,12 @@
     },
     "base_file": "https://purl.obolibrary.org/obo/maxo/maxo-base.json",
     "international": false,
-    "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations."
+    "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations.",
+    "deployment": {
+      "memory": "2Gi",
+      "cpu": 1,
+      "min_instances": 0,
+      "max_instances": 2
+    }
   }
 ]
