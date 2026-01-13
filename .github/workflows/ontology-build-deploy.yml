@@ -97,28 +97,28 @@ jobs:
         run: |
           gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:latest"
           gcloud artifacts docker tags add "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$SERVICE_TAG" "${GCLOUD_GCR}/${GCLOUD_REGISTRY_PROJECT_ID}/${GCLOUD_REGISTRY_IMAGE_ENV}/${GCLOUD_REGISTRY_IMAGE_PROJECT}/$SERVICE_NAME:$PROJECT_VERSION"
+      
+      - name: Get ontology deployment config
+        run: |
+          wget https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/main/config/ontologies.json
+          jq -r '.[] | select(.prefix=="${{ inputs.ontology }}")' ontologies.json > deployment-config.json
+          
+      - name: Set deployment variables
+        run: |
+          echo "DEPLOY_MEMORY=$(jq -r '.deployment.memory' deployment-config.json)" >> $GITHUB_ENV
+          echo "DEPLOY_CPU=$(jq -r '.deployment.cpu' deployment-config.json)" >> $GITHUB_ENV
+          echo "DEPLOY_MIN_INSTANCES=$(jq -r '.deployment.min_instances' deployment-config.json)" >> $GITHUB_ENV
+          echo "DEPLOY_MAX_INSTANCES=$(jq -r '.deployment.max_instances' deployment-config.json)" >> $GITHUB_ENV
+
       - name: Deploy Cloud Run
         run: |
           DOCKER_IMAGE_REPOSITORY=$(docker images --format "{{.Repository}}" | grep ontology-service)
           DOCKER_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" "${DOCKER_IMAGE_REPOSITORY}" )
 
-          # HP-specific deployment configuration (most used ontology)
-          if [ "$ONTOLOGY_SERVICE_ONTOLOGY" == "hp" ]; then
-            MEMORY="3Gi"
-            CPU="2"
-            MIN_INSTANCES="1"
-            MAX_INSTANCES="5"
-          else
-            MEMORY="2Gi"
-            CPU="1"
-            MIN_INSTANCES="0"
-            MAX_INSTANCES="2"
-          fi
-
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
-            --memory $MEMORY --cpu $CPU --min-instances $MIN_INSTANCES --max-instances $MAX_INSTANCES --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+            --memory $DEPLOY_MEMORY --cpu $DEPLOY_CPU --min-instances $DEPLOY_MIN_INSTANCES --max-instances $DEPLOY_MAX_INSTANCES --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
           echo "Migrating traffic:"
           gcloud run services update-traffic $SERVICE_NAME --to-revisions LATEST=100 --region "${GCLOUD_REGION}"
           echo "Invoke endpoint:"
