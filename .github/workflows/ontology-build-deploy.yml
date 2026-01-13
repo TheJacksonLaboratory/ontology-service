@@ -118,7 +118,11 @@ jobs:
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
+<<<<<<< HEAD
             --memory $DEPLOY_MEMORY --cpu $DEPLOY_CPU --min-instances $DEPLOY_MIN_INSTANCES --max-instances $DEPLOY_MAX_INSTANCES --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+=======
+            --memory "$MEMORY" --cpu "$CPU" --min-instances "$MIN_INSTANCES" --max-instances "$MAX_INSTANCES" --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+>>>>>>> aca0c546ccb7aa2603040102aa27c4080c630c84
           echo "Migrating traffic:"
           gcloud run services update-traffic $SERVICE_NAME --to-revisions LATEST=100 --region "${GCLOUD_REGION}"
           echo "Invoke endpoint:"
