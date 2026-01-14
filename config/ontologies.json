@@ -37,8 +37,8 @@
     "international": false,
     "description": "The Mammalian Phenotype Ontology (MP) provides a standardized vocabulary of phenotypic abnormalities encountered in Mus musculus.",
     "deployment": {
-      "memory": "2Gi",
-      "cpu": 1,
+      "memory": "3Gi",
+      "cpu": 2,
       "min_instances": 0,
       "max_instances": 2
     }
@@ -59,10 +59,10 @@
     "international": false,
     "description": "The Mondo Disease Ontology (Mondo) aims to harmonize disease definitions across the world. The name Mondo comes from the latin word 'mundus' and means 'for the world.'",
     "deployment": {
-      "memory": "2Gi",
+      "memory": "3Gi",
       "cpu": 2,
-      "min_instances": 1,
-      "max_instances": 4
+      "min_instances": 0,
+      "max_instances": 2
     }
   },
   {
@@ -81,8 +81,8 @@
     "international": false,
     "description": "The Medical Action Ontology (MAxO) provides a broad view of medical actions and includes terms for medical procedures, interventions, therapies, treatments, and recommendations.",
     "deployment": {
-      "memory": "2Gi",
-      "cpu": 1,
+      "memory": "3Gi",
+      "cpu": 2,
       "min_instances": 0,
       "max_instances": 2
     }
