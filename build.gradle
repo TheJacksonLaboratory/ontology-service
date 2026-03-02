@@ -7,7 +7,7 @@ plugins {
     id("com.dorongold.task-tree") version "3.0.0"
 }
 
-version = "0.5.19"
+version = "0.5.20"
 group = "org.jacksonlaboratory"
 
 repositories {
