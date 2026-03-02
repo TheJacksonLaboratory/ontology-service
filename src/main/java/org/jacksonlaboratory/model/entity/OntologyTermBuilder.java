@@ -12,6 +12,7 @@ public class OntologyTermBuilder {
 	private String comment;
 	private String synonyms;
 	private String xrefs;
+	private String publicationReferences;
 	private int nDescendants;
 	private List<Translation> translations;
 
@@ -50,6 +51,11 @@ public class OntologyTermBuilder {
 		return this;
 	}
 
+	public OntologyTermBuilder setPublicationReferences(String publicationReferences) {
+		this.publicationReferences = publicationReferences;
+		return this;
+	}
+
 	public OntologyTermBuilder setDescendantCount(int nDescendants) {
 		this.nDescendants = nDescendants;
 		return this;
@@ -63,7 +69,7 @@ public class OntologyTermBuilder {
 	public OntologyTerm createOntologyTerm() {
 		Objects.requireNonNull(id, "id for ontology term cannot be null!");
 		Objects.requireNonNull(name, "name for ontology term cannot be null!");
-		return new OntologyTerm(id, name, definition, comment, synonyms, xrefs, nDescendants, translations);
+		return new OntologyTerm(id, name, definition, comment, synonyms, xrefs, publicationReferences, nDescendants, translations);
 	}
 
 	public OntologyTermBuilder extendFromOntologyTerm(OntologyTerm term) {
@@ -71,6 +77,7 @@ public class OntologyTermBuilder {
 		this.comment = term.getComment();
 		this.synonyms = String.join(";", term.getSynonyms());
 		this.xrefs = String.join(";", term.getXrefs());
+		this.publicationReferences = String.join(";", term.getPublicationReferences());
 		this.nDescendants = term.getDescendantCount();
 		this.translations = term.getTranslations();
 		return this;

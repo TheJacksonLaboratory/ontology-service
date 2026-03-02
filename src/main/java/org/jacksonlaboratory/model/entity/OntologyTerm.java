@@ -34,13 +34,18 @@ public class OntologyTerm {
 
 	@Column(columnDefinition = "text")
 	private String definition;
+
 	@Column(columnDefinition = "text")
 	private String comment;
 
 	@Column(columnDefinition = "text")
 	private String synonyms;
+
 	@Column(columnDefinition = "text")
 	private String xrefs;
+
+	@Column(columnDefinition = "text")
+	private String publicationReferences;
 
 	@Column(columnDefinition = "int")
 	private int descendantCount;
@@ -49,23 +54,25 @@ public class OntologyTerm {
 	private List<Translation> translations;
 
 	@Creator
-	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, int descendantCount) {
+	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, String publicationReferences, int descendantCount) {
 		this.id = id;
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
 		this.synonyms = synonyms;
 		this.xrefs = xrefs;
+		this.publicationReferences = publicationReferences;
 		this.descendantCount = descendantCount;
 	}
 
-	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, int descendantCount, List<Translation> translations) {
+	public OntologyTerm(TermId id, String name, String definition, String comment, String synonyms, String xrefs, String publicationReferences, int descendantCount, List<Translation> translations) {
 		this.id = id;
 		this.name = name;
 		this.definition = definition;
 		this.comment = comment;
 		this.synonyms = synonyms;
 		this.xrefs = xrefs;
+		this.publicationReferences = publicationReferences;
 		this.descendantCount = descendantCount;
 		this.translations = translations;
 	}
@@ -126,6 +133,15 @@ public class OntologyTerm {
 	}
 
 	@ArraySchema(maxItems = 25)
+	public List<String> getPublicationReferences() {
+		if(publicationReferences == null || publicationReferences.isBlank()){
+			return Collections.emptyList();
+		} else {
+			return Arrays.asList(publicationReferences.split(";"));
+		}
+	}
+
+	@ArraySchema(maxItems = 25)
 	@Transient
 	public List<Translation> getTranslations() {
 		return translations;
@@ -136,12 +152,12 @@ public class OntologyTerm {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		OntologyTerm that = (OntologyTerm) o;
-		return Objects.equals(uid, that.uid) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(definition, that.definition) && Objects.equals(comment, that.comment) && Objects.equals(synonyms, that.synonyms) && Objects.equals(xrefs, that.xrefs) && Objects.equals(translations, that.translations);
+		return Objects.equals(uid, that.uid) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(definition, that.definition) && Objects.equals(comment, that.comment) && Objects.equals(synonyms, that.synonyms) && Objects.equals(xrefs, that.xrefs) && Objects.equals(publicationReferences, that.publicationReferences) && Objects.equals(translations, that.translations);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, id, name, definition, comment, synonyms, xrefs, translations);
+		return Objects.hash(uid, id, name, definition, comment, synonyms, xrefs, publicationReferences, translations);
 	}
 
 }
