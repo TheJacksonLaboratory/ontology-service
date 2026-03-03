@@ -39,7 +39,7 @@ class TermControllerSpec extends Specification {
         response.body().size() == res.size()
         response.status().getCode().toInteger() == 200
         where:
-        res  = [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0), new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", 0)]
+        res  = [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0), new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", "", 0)]
     }
 
     void "should return single term"() {
@@ -55,7 +55,7 @@ class TermControllerSpec extends Specification {
         response.status().getCode().toInteger() == 200
         where:
         q | res
-        "HP:000003"  | Optional.of(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0))
+        "HP:000003"  | Optional.of(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0))
     }
 
     void "should return children"() {
@@ -67,7 +67,7 @@ class TermControllerSpec extends Specification {
         response.status().getCode().toInteger() == 200
         where:
         q | res
-        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", 0))]
+        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", "", 0))]
     }
 
     void "should return parents"() {
@@ -79,7 +79,7 @@ class TermControllerSpec extends Specification {
         response.status().getCode().toInteger() == 200
         where:
         q | res
-        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", 0))]
+        "HP:000003"  |[new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0)), new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", "", 0))]
     }
 
 

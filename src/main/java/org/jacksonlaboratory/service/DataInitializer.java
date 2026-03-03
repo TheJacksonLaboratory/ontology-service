@@ -11,6 +11,7 @@ import org.jacksonlaboratory.model.entity.Translation;
 import org.jacksonlaboratory.repository.TermRepository;
 import org.jacksonlaboratory.repository.TranslationRepository;
 import org.monarchinitiative.phenol.ontology.data.Dbxref;
+import org.monarchinitiative.phenol.ontology.data.SimpleXref;
 import org.monarchinitiative.phenol.ontology.data.TermId;
 import org.monarchinitiative.phenol.ontology.data.TermSynonym;
 import org.slf4j.Logger;
@@ -64,6 +65,7 @@ public class DataInitializer {
 							.setSynonyms( term.getSynonyms().stream()
 									.filter(Predicate.not(TermSynonym::isObsoleteSynonym)).map(TermSynonym::getValue).collect(Collectors.joining(";")))
 							.setXrefs(term.getXrefs().stream().map(Dbxref::getName).collect(Collectors.joining(";")))
+							.setPublicationReferences(term.getPmidXrefs().stream().map(SimpleXref::toString).collect(Collectors.joining(";")))
 							.setDescendantCount(graphService.getDescendantCount(term.id())).createOntologyTerm()
 				).collect(Collectors.toList());
 				this.termRepository.saveAll(terms);
