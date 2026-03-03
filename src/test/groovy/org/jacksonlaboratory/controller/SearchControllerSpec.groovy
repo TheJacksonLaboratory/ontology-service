@@ -39,8 +39,8 @@ class SearchControllerSpec extends Specification {
         response.get("terms").get(0).get("comment").equals(res.get(0).getComment())
         where:
         q | res | limit
-        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)] | 10
-        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)] | -1
+        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0)] | 10
+        "arach" | [new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0)] | -1
     }
 
     void "should 404 search #q and return nothing"() {

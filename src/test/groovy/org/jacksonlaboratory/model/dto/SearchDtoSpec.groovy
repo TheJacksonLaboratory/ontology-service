@@ -9,7 +9,7 @@ class SearchDtoSpec extends Specification {
     void 'test methods, equal, hashcode should pass'() {
         given:
         def o =  new SearchDto([], 0)
-        def o2 = new SearchDto([new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", 0)], 1)
+        def o2 = new SearchDto([new OntologyTerm(TermId.of("HP:000003"), "fake name", "fake def", "comment", "", "", "", 0)], 1)
         def o3 = new SearchDto([], 0)
         expect:
         o.hashCode() != o2.hashCode()
