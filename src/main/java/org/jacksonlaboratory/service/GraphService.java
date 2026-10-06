@@ -57,25 +57,31 @@ public class GraphService {
 
 	public List<SimpleOntologyTerm> getParents(TermId termId) {
 		Collection<TermId> termIdList = this.ontology.graph().extendWithParents(termId, false);
-		return unpack(termIdList);
+		return unpack(termIdList, false);
 	}
 
 	public List<SimpleOntologyTerm> getChildren(TermId termId) {
 		Collection<TermId> termIdList = this.ontology.graph().extendWithChildren(termId, false);
-		return unpack(termIdList);
+		return unpack(termIdList, false);
 	}
 
 	public List<SimpleOntologyTerm> getDescendants(TermId termId){
 		Collection<TermId> termIdList = this.ontology.graph().extendWithDescendants(termId, false);
-		return unpack(termIdList);
+		return unpack(termIdList, false);
 	}
 
 	public List<SimpleOntologyTerm> getAncestors(TermId termId){
 		Collection<TermId> termIdList = this.ontology.graph().extendWithAncestors(termId, false);
-		return unpack(termIdList);
+		return unpack(termIdList, true);
 	}
 
-	List<SimpleOntologyTerm> unpack(Collection<TermId> termIdList){
+	/**
+	 * Fetch the terms for a collection of ids
+	 * @param termIdList Ids of the terms to fetch
+	 * @param withParents Whether to populate the immediate parent ids of each term
+	 * @return The terms, sorted by name
+	 */
+	List<SimpleOntologyTerm> unpack(Collection<TermId> termIdList, boolean withParents){
 		if (termIdList.isEmpty()){
 			return Collections.emptyList();
 		} else {
@@ -83,8 +89,24 @@ public class GraphService {
 			if (international){
 				termList = addTranslations(termList);
 			}
-			return termList.stream().map(SimpleOntologyTerm::new).sorted(Comparator.comparing(SimpleOntologyTerm::getName)).collect(Collectors.toList());
+			Map<TermId, List<String>> parents = withParents ? parentIds(termIdList) : Map.of();
+			return termList.stream()
+					.map(term -> new SimpleOntologyTerm(term,
+							withParents ? parents.getOrDefault(term.getTermId(), List.of()) : null))
+					.sorted(Comparator.comparing(SimpleOntologyTerm::getName))
+					.collect(Collectors.toList());
 		}
+	}
+
+	/**
+	 * Map term ids to the ids of their immediate parents
+	 * @param termIdList Ids to look up, each of which must be present in the graph
+	 * @return The parent ids of each term, sorted
+	 */
+	Map<TermId, List<String>> parentIds(Collection<TermId> termIdList){
+		return termIdList.stream().distinct().collect(Collectors.toMap(id -> id,
+				id -> this.ontology.graph().getParents(id).stream()
+						.map(TermId::getValue).sorted().collect(Collectors.toList())));
 	}
 
 	List<OntologyTerm> addTranslations(Collection<OntologyTerm> terms){

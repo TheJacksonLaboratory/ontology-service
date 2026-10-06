@@ -83,6 +83,26 @@ class TermControllerSpec extends Specification {
     }
 
 
+    void "should carry parent ids on the ancestors route"() {
+        when:
+        def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/HP:000003/ancestors'), Argument.listOf(Map.class))
+        then:
+        1 * graphService.getAncestors(TermId.of("HP:000003")) >> [
+                new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", "", 0), ["HP:000001"])]
+        response.status().getCode().toInteger() == 200
+        response.body().get(0).get("parents") == ["HP:000001"]
+    }
+
+    void "should omit the parents key entirely on other relation routes"() {
+        when:
+        def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/HP:000003/children'), Argument.listOf(Map.class))
+        then:
+        1 * graphService.getChildren(TermId.of("HP:000003")) >> [
+                new SimpleOntologyTerm(new OntologyTerm(TermId.of("HP:000023"), "fake name 2", "fake def 2", "comment 1", "", "", "", 0))]
+        response.status().getCode().toInteger() == 200
+        !response.body().get(0).containsKey("parents")
+    }
+
     void "should return bad request"(){
         when:
             def response = client.toBlocking().exchange(HttpRequest.GET('/api/hp/terms/' + q), Argument.listOf(Map.class))
