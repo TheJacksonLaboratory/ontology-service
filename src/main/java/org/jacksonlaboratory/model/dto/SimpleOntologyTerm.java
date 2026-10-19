@@ -1,6 +1,8 @@
 package org.jacksonlaboratory.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.jacksonlaboratory.model.entity.OntologyTerm;
 import org.jacksonlaboratory.model.entity.Translation;
 
@@ -16,11 +18,23 @@ public class SimpleOntologyTerm {
 
 	private final List<Translation> translations;
 
+	private final List<String> parents;
+
 	public SimpleOntologyTerm(OntologyTerm ontologyTerm) {
+		this(ontologyTerm, null);
+	}
+
+	/**
+	 * Create a term that carries the ids of its immediate parents
+	 * @param ontologyTerm The term to copy
+	 * @param parents Ids of the immediate parents, or null when they were not requested
+	 */
+	public SimpleOntologyTerm(OntologyTerm ontologyTerm, List<String> parents) {
 		this.id = ontologyTerm.getId();
 		this.name = ontologyTerm.getName();
 		this.translations = ontologyTerm.getTranslations();
 		this.nDescendant = ontologyTerm.getDescendantCount();
+		this.parents = parents;
 	}
 
 	public String getId() {
@@ -37,6 +51,12 @@ public class SimpleOntologyTerm {
 
 	public int getDescendantCount() {
 		return nDescendant;
+	}
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Schema(nullable = true, description = "Ids of the immediate parents, present only on the ancestors route")
+	public List<String> getParents() {
+		return parents;
 	}
 
 	@Override

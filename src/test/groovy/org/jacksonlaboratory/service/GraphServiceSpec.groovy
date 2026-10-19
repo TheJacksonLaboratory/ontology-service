@@ -91,12 +91,33 @@ class GraphServiceSpec extends Specification {
 
     void 'test graph service add unpack'() {
         when:
-        def u = graphService.unpack(l)
+        def u = graphService.unpack(l, false)
         then:
         _ * termRepository.findByTermIdIn(_) >> []
         u.size() == 0
         where:
         l << [[TermId.of("HP:00001")], []]
+    }
+
+    void 'test graph service ancestors carry parent ids'() {
+        when:
+        def terms = graphService.getAncestors(TermId.of("HP:0000003"))
+        then:
+        _ * termRepository.findByTermIdIn(_) >> [
+                new OntologyTermBuilder(TermId.of("HP:0000001"), "Alpha term").createOntologyTerm(),
+                new OntologyTermBuilder(TermId.of("HP:0000002"), "Beta term").createOntologyTerm()];
+        terms.size() == 2
+        terms.find { it.name == "Alpha term" }.parents == []
+        terms.find { it.name == "Beta term" }.parents == ["HP:0000001"]
+    }
+
+    void 'test graph service children omit parent ids'() {
+        when:
+        def terms = graphService.getChildren(TermId.of("HP:0000001"))
+        then:
+        _ * termRepository.findByTermIdIn(_) >> [
+                new OntologyTermBuilder(TermId.of("HP:0000002"), "Beta term").createOntologyTerm()];
+        terms.get(0).parents == null
     }
 
     void 'test graph service add translation'() {
