@@ -19,7 +19,7 @@ env:
   ONTOLOGY_SERVICE_ONTOLOGY: hp
   ONTOLOGY_SERVICE_INTERNATIONAL: true
   ONTOLOGY_SERVICE_LOAD: ${{ inputs.load }}
-  SERVICE_NAME: ontology-hp-sqa
+  SERVICE_NAME: ontology-service-hp-sqa
 
 jobs:
   build-deploy:
