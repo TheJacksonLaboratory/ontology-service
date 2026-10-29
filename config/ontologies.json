@@ -15,7 +15,7 @@
     "international": true,
     "description": "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease.",
     "deployment": {
-      "memory": "3Gi",
+      "memory": "4Gi",
       "cpu": 2,
       "min_instances": 1,
       "max_instances": 5
