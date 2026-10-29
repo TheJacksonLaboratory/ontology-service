@@ -75,7 +75,6 @@ jobs:
           CONFIG=$(jq -r '.[] | select(.prefix=="hp")' config/ontologies.json)
           echo "DEPLOY_MEMORY=$(echo "$CONFIG" | jq -r '.deployment.memory')" >> $GITHUB_ENV
           echo "DEPLOY_CPU=$(echo "$CONFIG" | jq -r '.deployment.cpu')" >> $GITHUB_ENV
-          echo "DEPLOY_MIN_INSTANCES=$(echo "$CONFIG" | jq -r '.deployment.min_instances')" >> $GITHUB_ENV
           echo "DEPLOY_MAX_INSTANCES=$(echo "$CONFIG" | jq -r '.deployment.max_instances')" >> $GITHUB_ENV
 
       - name: Deploy Cloud Run
@@ -83,6 +82,6 @@ jobs:
           gcloud run deploy $SERVICE_NAME --quiet \
             --image "${DOCKER_IMAGE}" --project "${GCLOUD_PROJECT_ID}" \
             --region "${GCLOUD_REGION}" --platform managed --allow-unauthenticated --format json \
-            --memory "$DEPLOY_MEMORY" --cpu "$DEPLOY_CPU" --min-instances "$DEPLOY_MIN_INSTANCES" --max-instances "$DEPLOY_MAX_INSTANCES" --no-cpu-throttling --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
+            --memory "$DEPLOY_MEMORY" --cpu "$DEPLOY_CPU" --min-instances 0 --max-instances "$DEPLOY_MAX_INSTANCES" --ingress internal-and-cloud-load-balancing --service-account "${GCLOUD_SERVICE_ACCOUNT}"
           echo "Service URL:"
           gcloud run services describe $SERVICE_NAME --project "${GCLOUD_PROJECT_ID}" --region "${GCLOUD_REGION}" --format 'value(status.url)'

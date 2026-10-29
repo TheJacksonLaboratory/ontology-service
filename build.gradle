@@ -76,7 +76,7 @@ tasks {
         environmentVariable(['ONTOLOGY_SERVICE_ONTOLOGY':"${System.env.ONTOLOGY_SERVICE_ONTOLOGY}".toString(),
                              'ONTOLOGY_SERVICE_LOAD':"${System.env.ONTOLOGY_SERVICE_LOAD}".toString(),
                              'ONTOLOGY_SERVICE_INTERNATIONAL':"${System.env.ONTOLOGY_SERVICE_INTERNATIONAL}".toString()] )
-        entryPoint("java", "-Xmx6g", "-Xms1024m", "-jar", "/home/app/application.jar")
+        entryPoint("java", "-XX:MaxRAMPercentage=75", "-jar", "/home/app/application.jar")
     }
 
     dockerBuild {
